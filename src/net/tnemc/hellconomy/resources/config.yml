@@ -1,0 +1,113 @@
+# HellConomy v0.1.0.0
+# Author: creatorfromhell
+# License: http://creativecommons.org/licenses/by-nc-nd/4.0/
+# If you would like to contribute to the plugin
+# you can do so via Github at https://github.com/TheNewEconomy/HellConomy
+# To donate to the continued development of HellConomy with perks, https://patreon.com/creatorfromhell
+main:
+
+  #Whether or not to enable plugin metrics. This lets us track plugin usage.
+  metrics: true
+
+#Server Configurations
+server:
+
+  #The name of this server, for balance-saving purposes.
+  name: "Main Server"
+
+#Account Configurations
+account:
+
+  #The maximum balance possible for this currency.
+  #Maximum possible value: 900000000000000000000000000000000000000000000
+  max_balance: 900000000000000000000000000000000000000000000
+
+  #The initial balance for accounts.
+  #Will be used if no world-specific configurations are found if multiworld is enabled
+  balance: 200.0
+
+#Currency Configurations
+currency:
+
+  #The SI Prefixes used when <shorten> is used for the currency's format.
+  #TNE's default prefixes are based off of the Internation Bureau of Weights and Measures official list.
+  #http://www.unitarium.com/si-prefixes along with a few addition shorts for above Nonillion.
+  #The order in which the characters are:
+  #Thousand - k
+  #Million - M
+  #Billion - G
+  #Trillion - T
+  #Quadrillion - P
+  #Quintillion - E
+  #Sextillion - Z
+  #Septillion - Y
+  #Octillion - X
+  #Nonillion - W
+  #Decillion - V
+  #Undecillion - U
+  #Nondecillion - N
+  #Nonvigintillion - ₮
+  prefixes: 'kMGTPEZYXWVUN₮'
+
+  #The format to use when outputting this currency into chat.
+  #The variables you're able to use here.
+  #<symbol> - The currency's symbol
+  #<decimal> - The currency's decimal.
+  #<major> - A combination of the currency's major amount and name
+  #<minor> - A combination of the currency's minor amount and name
+  #<major.name> - The currency's major name.
+  #<minor.name> - The currency's minor name.
+  #<major.amount> - The currency's major amount.
+  #<minor.amount> - The currency's minor amount.
+  #<short.amount> - The currency's shortened amount.
+  #<shorten> - Added to make the outputted value shortened
+  # If shortened, it will ignore the value of Format.
+  #It's also possible to include all colour variables from messages.yml
+  #Example: <major> and <minor>
+  format: <symbol><major.amount><decimal><minor.amount>
+
+  #Whether or not to consolidate item-based currencies automatically.
+  consolidate: false
+
+  #Whether or not you wish to use an item as currency.
+  item_currency: false
+
+  #Configurations relating to item currencies for the basic currency.
+  #Format: Material: Value(using a period "." as the decimal)
+  items:
+
+    GOLD_BLOCK: 9
+    GOLD_INGOT: 1
+
+  #Configurations relating to virtual currency tiers for the basic currency.
+  #Format: Name: Value(using a period "." as the decimal)
+  virtual:
+
+    Dollar: 1
+    Cent: 0.01
+
+
+
+#Database configurations
+database:
+
+  #This is the database type you wish to use(Current options: H2, MySQL, Oracle, PostgreSQL)
+  type: MySQL
+
+  #File name, minus extension, for any DB type which requires a file.
+  file: HellConomy
+
+  #The host for the database.
+  host: localhost
+
+  #The port for the database.
+  port: '3306'
+
+  #The name of the database to use for storage
+  db: minecraft
+
+  #The name of the user for the database
+  user: tne
+
+  #The password for the database user
+  password: tne14
