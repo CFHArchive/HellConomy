@@ -26,7 +26,7 @@ public class ConfigurationMapper {
 
   public void initialize() {
     try {
-      initializeFile("config.yml", "main", "account", "currency", "database");
+      initializeFile("config.yml", "main", "server", "account", "currency", "world_sharing", "database");
       initializeFile("messages.yml", "messages");
     } catch(UnsupportedEncodingException ignore) {
       HellConomy.instance().getLogger().warning("Error while loading configurations.");

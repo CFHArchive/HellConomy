@@ -31,6 +31,9 @@ account:
 #Currency Configurations
 currency:
 
+  #The symbol of the currency.
+  symbol: "$"
+
   #The SI Prefixes used when <shorten> is used for the currency's format.
   #TNE's default prefixes are based off of the Internation Bureau of Weights and Measures official list.
   #http://www.unitarium.com/si-prefixes along with a few addition shorts for above Nonillion.

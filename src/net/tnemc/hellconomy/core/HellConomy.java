@@ -3,9 +3,14 @@ package net.tnemc.hellconomy.core;
 import net.tnemc.hellconomy.core.command.CommandManager;
 import net.tnemc.hellconomy.core.command.TNECommand;
 import net.tnemc.hellconomy.core.common.configuration.ConfigurationMapper;
+import net.tnemc.hellconomy.core.compatibility.ItemCompatibility;
+import net.tnemc.hellconomy.core.compatibility.item.ItemCompatibility12;
+import net.tnemc.hellconomy.core.compatibility.item.ItemCompatibility13;
 import net.tnemc.hellconomy.core.data.SaveManager;
 import net.tnemc.hellconomy.core.data.Version;
+import net.tnemc.hellconomy.core.utils.MISCUtils;
 import net.tnemc.hellconomy.core.utils.Metrics;
+import net.tnemc.hellconomy.core.world.WorldEntry;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -13,7 +18,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -29,8 +33,6 @@ import java.util.logging.Logger;
  */
 public class HellConomy extends JavaPlugin {
 
-  public List<String> languages = new ArrayList<>();
-
   private static HellConomy instance;
 
   private SaveManager saveManager;
@@ -38,9 +40,11 @@ public class HellConomy extends JavaPlugin {
   private String defaultWorld = "world";
   private String version = "0.1.0.0";
 
-  public static boolean maintenance = false;
-
   private ConfigurationMapper mapper;
+  private WorldManager worldManager;
+
+  //Compatibility Classes.
+  private ItemCompatibility itemCompatibility;
 
   public void onLoad() {
     instance = this;
@@ -50,6 +54,17 @@ public class HellConomy extends JavaPlugin {
 
     mapper = new ConfigurationMapper();
     mapper.initialize();
+
+    worldManager = new WorldManager();
+
+    mapper.getConfiguration("world_sharing").getKeys().forEach((world)->{
+      final List<String> shared = mapper.getConfiguration("world_sharing").getStringList("world_sharing." + world);
+
+      worldManager.addEntry(new WorldEntry(world, world));
+      for(String worldName : shared) {
+        worldManager.addEntry(new WorldEntry(worldName, world));
+      }
+    });
 
     commandManager = new CommandManager();
 
@@ -72,6 +87,7 @@ public class HellConomy extends JavaPlugin {
     //TODO: Register Commands.
 
     //TODO: Register Listeneners
+    itemCompatibility = (MISCUtils.isOneThirteen())? new ItemCompatibility13() : new ItemCompatibility12();
 
     new Metrics(this);
 
@@ -146,5 +162,13 @@ public class HellConomy extends JavaPlugin {
 
   public static ConfigurationMapper mapper() {
     return instance.mapper;
+  }
+
+  public static WorldManager worldManager() {
+    return instance.worldManager;
+  }
+
+  public static ItemCompatibility item() {
+    return instance().itemCompatibility;
   }
 }
