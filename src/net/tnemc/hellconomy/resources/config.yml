@@ -15,6 +15,9 @@ server:
   #The name of this server, for balance-saving purposes.
   name: "Main Server"
 
+  #Whether or not balances should differ between different worlds.
+  multi_world: false
+
 #Account Configurations
 account:
 
@@ -23,7 +26,6 @@ account:
   max_balance: 900000000000000000000000000000000000000000000
 
   #The initial balance for accounts.
-  #Will be used if no world-specific configurations are found if multiworld is enabled
   balance: 200.0
 
 #Currency Configurations
@@ -86,13 +88,20 @@ currency:
     Dollar: 1
     Cent: 0.01
 
+#World Sharing Configurations
+world_sharing:
+
+  #The following is an example of how to share balances between a world named example_2, and worlds named example_4 and example_5.
+  example_2:
+    - "example_4"
+    - "example_5"
 
 
 #Database configurations
 database:
 
   #This is the database type you wish to use(Current options: H2, MySQL, Oracle, PostgreSQL)
-  type: MySQL
+  type: H2
 
   #File name, minus extension, for any DB type which requires a file.
   file: HellConomy
@@ -107,7 +116,7 @@ database:
   db: minecraft
 
   #The name of the user for the database
-  user: tne
+  user: username
 
   #The password for the database user
-  password: tne14
+  password: password
