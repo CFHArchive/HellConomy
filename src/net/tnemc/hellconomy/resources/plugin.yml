@@ -1,0 +1,10 @@
+#General Data
+name: HellConomy
+version: 0.1.0.0
+description: A lightweight, but powerful economy plugin.
+author: creatorfromhell
+api-version: 1.13
+
+#Plugin Data
+main: net.tnemc.hellconomy.core.HellConomy
+softdepend: [PlaceholderAPI, Vault, Essentials, Towny, mcMMO, GUIShop, DiscordSRV, Multiverse-Core]

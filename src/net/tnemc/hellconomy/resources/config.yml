@@ -92,9 +92,9 @@ currency:
     Cent: 0.01
 
 #World Sharing Configurations
+#The following is an example of how to share balances between a world named example_2, and worlds named example_4 and example_5.
 world_sharing:
 
-  #The following is an example of how to share balances between a world named example_2, and worlds named example_4 and example_5.
   example_2:
     - "example_4"
     - "example_5"

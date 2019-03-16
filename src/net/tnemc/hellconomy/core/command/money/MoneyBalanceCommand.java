@@ -2,7 +2,13 @@ package net.tnemc.hellconomy.core.command.money;
 
 import net.tnemc.hellconomy.core.HellConomy;
 import net.tnemc.hellconomy.core.command.TNECommand;
+import net.tnemc.hellconomy.core.common.account.HellAccount;
+import net.tnemc.hellconomy.core.currency.CurrencyFormatter;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+
+import java.math.BigDecimal;
+import java.util.UUID;
 
 /**
  * Created by creatorfromhell.
@@ -42,6 +48,11 @@ public class MoneyBalanceCommand extends TNECommand {
 
   @Override
   public boolean execute(CommandSender sender, String command, String[] arguments) {
+
+    final UUID id = getPlayer(sender).getUniqueId();
+    final String world = getPlayer(sender).getWorld().getName();
+    final BigDecimal amount = HellAccount.getHoldings(id, world, HellConomy.currencyManager().get(world), false);
+    sender.sendMessage(ChatColor.YELLOW + "You have " + CurrencyFormatter.format(HellConomy.currencyManager().get(world), world, amount));
     return true;
   }
 }

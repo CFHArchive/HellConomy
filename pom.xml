@@ -107,6 +107,10 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+        <repository>
+            <id>vault-repo</id>
+            <url>http://nexus.hc.to/content/repositories/pub_releases</url>
+        </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
@@ -139,7 +143,7 @@
             <groupId>net.tnemc</groupId>
             <artifactId>Reserve</artifactId>
             <version>0.1.0.11</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.javalite</groupId>
@@ -159,6 +163,18 @@
             <groupId>net.tnemc</groupId>
             <artifactId>TheNewConfigLibrary</artifactId>
             <version>0.1.1.23</version>
+        </dependency>
+        <dependency>
+            <groupId>net.milkbowl.vault</groupId>
+            <artifactId>VaultAPI</artifactId>
+            <version>1.6</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.bukkit</groupId>
+                    <artifactId>bukkit</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- SLF4J is a real dickhead. -->
         <dependency>

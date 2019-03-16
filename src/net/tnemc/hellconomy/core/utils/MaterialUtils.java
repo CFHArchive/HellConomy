@@ -2,6 +2,7 @@ package net.tnemc.hellconomy.core.utils;
 
 import net.tnemc.hellconomy.core.HellConomy;
 import net.tnemc.hellconomy.core.currency.ItemTier;
+import net.tnemc.hellconomy.core.item.SerialItem;
 import org.bukkit.Material;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.enchantments.Enchantment;

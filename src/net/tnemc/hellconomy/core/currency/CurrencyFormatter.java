@@ -20,30 +20,30 @@ import java.util.Map;
 public class CurrencyFormatter {
 
   public static String format(String world, BigDecimal amount) {
-    return format(HellConomy.manager().currencyManager().get(world), world, amount);
+    return format(HellConomy.currencyManager().get(world), world, amount);
   }
 
   public static String format(String world, String name, BigDecimal amount) {
-    return format(HellConomy.manager().currencyManager().get(world, name), world, amount);
+    return format(HellConomy.currencyManager().get(world, name), world, amount);
   }
 
   public static String format(String world, String name, BigDecimal amount, String format) {
-    return format(HellConomy.manager().currencyManager().get(world, name), world, amount, format);
+    return format(HellConomy.currencyManager().get(world, name), world, amount, format);
   }
 
   public static String format(Currency currency, String world, BigDecimal amount) {
-    return format(HellConomy.manager().currencyManager().get(world, currency.name()), world, amount);
+    return format(HellConomy.currencyManager().get(world, currency.name()), world, amount);
   }
 
   public static String format(HellCurrency currency, String world, BigDecimal amount) {
 
-    if(currency == null) currency = HellConomy.manager().currencyManager().get(HellConomy.instance().getDefaultWorld());
+    if(currency == null) currency = HellConomy.currencyManager().get(HellConomy.instance().getDefaultWorld());
     return format(currency, world, amount, ((currency.shorten())? "<symbol><short.amount>" : currency.getFormat()));
   }
 
   public static String format(HellCurrency currency, String world, BigDecimal amount, String format) {
 
-    if(currency == null) currency = HellConomy.manager().currencyManager().get(HellConomy.instance().getDefaultWorld());
+    if(currency == null) currency = HellConomy.currencyManager().get(HellConomy.instance().getDefaultWorld());
 
     amount = round(world, currency.name(), amount);
 
@@ -74,14 +74,14 @@ public class CurrencyFormatter {
   }
 
   public static BigDecimal round(String world, String currency, BigDecimal amount) {
-    if(HellConomy.manager().currencyManager().contains(world, currency)) {
-      return amount.setScale(HellConomy.manager().currencyManager().get(world, currency).decimalPlaces(), BigDecimal.ROUND_CEILING);
+    if(HellConomy.currencyManager().contains(world, currency)) {
+      return amount.setScale(HellConomy.currencyManager().get(world, currency).decimalPlaces(), BigDecimal.ROUND_CEILING);
     }
 
-    if(HellConomy.manager().currencyManager().contains(world)) {
-      return amount.setScale(HellConomy.manager().currencyManager().get(world).decimalPlaces(), BigDecimal.ROUND_CEILING);
+    if(HellConomy.currencyManager().contains(world)) {
+      return amount.setScale(HellConomy.currencyManager().get(world).decimalPlaces(), BigDecimal.ROUND_CEILING);
     }
-    return amount.setScale(HellConomy.manager().currencyManager().get(HellConomy.instance().getDefaultWorld()).decimalPlaces(), BigDecimal.ROUND_CEILING);
+    return amount.setScale(HellConomy.currencyManager().get(HellConomy.instance().getDefaultWorld()).decimalPlaces(), BigDecimal.ROUND_CEILING);
   }
 
   public static String parseAmount(HellCurrency currency, String world, String amount) {
@@ -143,12 +143,12 @@ public class CurrencyFormatter {
   }
 
   public static boolean isBigDecimal(String value, String world) {
-    String major = HellConomy.manager().currencyManager().get(world).name();
+    String major = HellConomy.currencyManager().get(world).name();
     return isBigDecimal(value, major, world);
   }
 
   private static boolean isBigDecimal(String value, String currency, String world) {
-    String decimal = (HellConomy.manager().currencyManager().get(world, currency)).getDecimal();
+    String decimal = (HellConomy.currencyManager().get(world, currency)).getDecimal();
     try {
       new BigDecimal(value.replace(decimal, "."));
       return true;
@@ -158,12 +158,12 @@ public class CurrencyFormatter {
   }
 
   public static BigDecimal translateBigDecimal(String value, String world) {
-    String major = HellConomy.manager().currencyManager().get(world).name();
+    String major = HellConomy.currencyManager().get(world).name();
     return translateBigDecimal(value, major, world);
   }
 
   public static BigDecimal translateBigDecimal(String value, String currency, String world) {
-    String decimal = (HellConomy.manager().currencyManager().get(world, currency)).getDecimal();
+    String decimal = (HellConomy.currencyManager().get(world, currency)).getDecimal();
     return new BigDecimal(value.replace(decimal, "."));
   }
 }

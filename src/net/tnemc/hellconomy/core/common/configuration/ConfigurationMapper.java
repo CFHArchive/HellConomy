@@ -79,6 +79,19 @@ public class ConfigurationMapper {
     return getConfiguration(node).getBool(node);
   }
 
+  public String getString(String node, String defaultValue) {
+    return getConfiguration(node).getString(node, defaultValue);
+  }
+
+  public boolean getBool(String node, boolean defaultValue) {
+    if(getConfiguration(node).contains(node)) return getConfiguration(node).getBool(node);
+    return defaultValue;
+  }
+
+  public int getInt(String node, int defaultValue) {
+    return getConfiguration(node).getInt(node, defaultValue);
+  }
+
   public double getDouble(String node) {
     return getConfiguration(node).getDouble(node);
   }

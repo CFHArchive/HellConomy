@@ -8,9 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -22,30 +21,27 @@ import java.util.UUID;
  * International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
-public class PlayerJoinListener implements Listener {
+public class WorldChangeListener implements Listener {
 
   private HellConomy plugin;
 
-  public PlayerJoinListener(HellConomy plugin) {
+  public WorldChangeListener(HellConomy plugin) {
     this.plugin = plugin;
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
-  public void onJoin(PlayerJoinEvent event) {
+  public void onWorldChange(final PlayerChangedWorldEvent event) {
     final Player player = event.getPlayer();
     final UUID id = player.getUniqueId();
     final String world = HellConomy.instance().normalizeWorld(player.getWorld().getName());
-    final boolean first = !HellAccount.exists(id);
 
-    if(first) {
-      HellAccount.add(id, player.getName(), new Date().getTime(), true);
-      HellAccount.initializeHoldings(id, world);
+    if(HellConomy.mapper().getBool("Core.Multiworld") &&
+        !HellConomy.instance().getWorldManager(event.getFrom().getName()).getBalanceWorld().equalsIgnoreCase(world)) {
+      HellConomy.instance().getWorldManager(world).getItemCurrencies().forEach(value -> {
+        final HellCurrency currency = HellConomy.currencyManager().get(world, value);
+        ItemCalculations.setItems(HellConomy.currencyManager().get(world, value),
+                                  HellAccount.getHoldings(id, world, currency, true), player.getInventory(), false);
+      });
     }
-
-    HellConomy.instance().getWorldManager(world).getItemCurrencies().forEach(value -> {
-      final HellCurrency currency = HellConomy.currencyManager().get(world, value);
-      ItemCalculations.setItems(HellConomy.currencyManager().get(world, value),
-                                HellAccount.getHoldings(id, world, currency, true), player.getInventory(), false);
-    });
   }
 }

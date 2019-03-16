@@ -42,6 +42,10 @@ public class Balance extends Model {
     return balance.saveIt();
   }
 
+  public static boolean hasBalance(UUID owner, String server, String world, String currency, BigDecimal amount) {
+    return getBalanceValue(owner, server, world, currency).compareTo(amount) >= 0;
+  }
+
   public static BigDecimal addBalanceValue(UUID owner, String server, String world, String currency, BigDecimal amount) {
     final BigDecimal result = (exists(owner, server, world, currency))? getBalanceValue(owner, server, world, currency).add(amount) : amount;
 
