@@ -82,6 +82,11 @@ public class SaveManager {
                   "`id` INTEGER NOT NULL UNIQUE," +
                   "`version_value` VARCHAR(15)" +
                   ") ENGINE = INNODB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+
+    mysql.add("CREATE TABLE IF NOT EXISTS `hellco_version` (" +
+                  "`id` INTEGER NOT NULL UNIQUE," +
+                  "`version_value` VARCHAR(15)" +
+                  ") ENGINE = INNODB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
     
     List<String> h2 = new ArrayList<>();
 
@@ -114,18 +119,14 @@ public class SaveManager {
   }
 
   public void open() {
-    DataProvider provider = providers.get(type);
     try {
       db.open(dataSource);
-      //db.open(provider.getDriver(), provider.getURL(file, host, port, dbName), user, pass);
-    } catch(Exception e) {
-      //TODO: Nothing really
+    } catch(Exception ignore) {
     }
   }
 
   public void close() {
     db.close();
-    //dataSource.close();
   }
 
   public void addProvider(String type, DataProvider provider) {

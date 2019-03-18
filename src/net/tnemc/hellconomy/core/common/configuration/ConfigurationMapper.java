@@ -28,6 +28,8 @@ public class ConfigurationMapper {
     try {
       initializeFile("config.yml", "main", "server", "account", "currency", "world_sharing", "database");
       initializeFile("messages.yml", "messages");
+
+      System.out.println("Configurations Size: " + configurations.size());
     } catch(UnsupportedEncodingException ignore) {
       HellConomy.instance().getLogger().warning("Error while loading configurations.");
     }
@@ -48,6 +50,7 @@ public class ConfigurationMapper {
 
   public void addConfiguration(String file, CommentedConfiguration configuration, String... identifiers) {
     configurations.put(file, configuration);
+    addIdentifiers(file, identifiers);
   }
 
   public void addIdentifiers(String file, String... identifiers) {

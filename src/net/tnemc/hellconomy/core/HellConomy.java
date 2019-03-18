@@ -101,8 +101,9 @@ public class HellConomy extends JavaPlugin {
     mapper = new ConfigurationMapper();
     mapper.initialize();
 
+    System.out.println("Config Null: " + (mapper.getConfigurationByID("world_sharing") == null));
 
-    mapper.getConfigurationByID("world_sharing").getKeys().forEach((world)->{
+    mapper.getConfigurationByID("world_sharing").getSection("world_sharing").getKeys().forEach((world)->{
       final List<String> shared = mapper.getConfigurationByID("world_sharing").getStringList("world_sharing." + world);
 
       addWorldManager(new WorldManager(world, world));
