@@ -34,6 +34,7 @@ public class PlayerJoinListener implements Listener {
   public void onJoin(PlayerJoinEvent event) {
     final Player player = event.getPlayer();
     final UUID id = player.getUniqueId();
+    HellConomy.instance().saveManager().open();
     final String world = HellConomy.instance().normalizeWorld(player.getWorld().getName());
     final boolean first = !HellAccount.exists(id);
 
@@ -47,5 +48,6 @@ public class PlayerJoinListener implements Listener {
       ItemCalculations.setItems(HellConomy.currencyManager().get(world, value),
                                 HellAccount.getHoldings(id, world, currency, true), player.getInventory(), false);
     });
+    HellConomy.instance().saveManager().close();
   }
 }

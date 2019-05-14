@@ -32,7 +32,7 @@ public class TeleportListener implements Listener {
     String toWorld = event.getTo().getWorld().getName();
     toWorld = HellConomy.instance().getWorldManager(toWorld).getBalanceWorld();
 
-    if(!fromWorld.equals(toWorld) && HellConomy.mapper().getBool("Core.Multiworld")) {
+    if(!fromWorld.equals(toWorld) && HellConomy.mapper().getBool("server.multi_world")) {
       final PlayerInventory inventory = event.getPlayer().getInventory();
       HellAccount.saveItemCurrency(event.getPlayer().getUniqueId(), fromWorld, inventory, true);
     }

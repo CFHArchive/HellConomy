@@ -16,7 +16,7 @@ import org.javalite.activejdbc.annotations.Table;
  * Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 @DbName("HellConomy")
-@Table("tnk_version")
+@Table("hellco_version")
 @IdName("id")
 public class Version extends Model {
 

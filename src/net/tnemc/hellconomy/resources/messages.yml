@@ -33,11 +33,16 @@
 #  &r   |  <reset>
 #  &m   |  <strike>
 #  &n   |  <underline>
-Messages:
-
-    Command:
-
-       General:
-          Unable: "<red>I'm sorry, but you're not allowed to use that command."
-          None: "<yellow>Command $command $arguments could not be found! Try using $command help."
-          InActive: "<red>Command $command $arguments has been deactivated! Try using $command help."
+messages:
+    commands:
+       general:
+          unable: "<red>I'm sorry, but you're not allowed to use that command."
+          none: "<yellow>Command $command $arguments could not be found! Try using $command help."
+          inactive: "<red>Command $command $arguments has been deactivated! Try using $command help."
+       money:
+          balance: "/money balance [world] - Displays your current holdings."
+          give: "/money give <player> <amount> [world] - Adds money into your economy, and gives it to an account."
+          other: "/money other <player> [world] - Displays the holdings of another account."
+          pay: "/money pay <player> <amount> [world] - Displays the holdings of another account."
+          set: "/money set <player> <amount> [world] - Set the holdings of an account."
+          take: "/money take <player> <amount> [world] - Removes money from your economy, specifically from an account's balance."

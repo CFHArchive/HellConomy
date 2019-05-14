@@ -76,6 +76,11 @@ public class SaveManager {
     dataSource = new HikariDataSource(config);
 
     //initialize tables.
+
+    //account_id
+    //account_display
+    //account_created
+    //account_player
     List<String> mysql = new ArrayList<>();
 
     mysql.add("CREATE TABLE IF NOT EXISTS `hellco_version` (" +
@@ -83,9 +88,24 @@ public class SaveManager {
                   "`version_value` VARCHAR(15)" +
                   ") ENGINE = INNODB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
 
-    mysql.add("CREATE TABLE IF NOT EXISTS `hellco_version` (" +
-                  "`id` INTEGER NOT NULL UNIQUE," +
-                  "`version_value` VARCHAR(15)" +
+    mysql.add("CREATE TABLE IF NOT EXISTS `hellco_ids` (" +
+                  "`uuid` VARCHAR(36) UNIQUE," +
+                  "`display` VARCHAR(100)" +
+                  ") ENGINE = INNODB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+
+    mysql.add("CREATE TABLE IF NOT EXISTS `hellco_accounts` (" +
+                  "`account_id` VARCHAR(36) NOT NULL UNIQUE," +
+                  "`account_display` VARCHAR(100)," +
+                  "`account_created` BIGINT(60)," +
+                  "`account_player` BOOLEAN" +
+                  ") ENGINE = INNODB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+
+    mysql.add("CREATE TABLE IF NOT EXISTS `hellco_balances` (" +
+                  "`balance_owner` VARCHAR(36) NOT NULL UNIQUE," +
+                  "`balance_server` VARCHAR(100)," +
+                  "`balance_world` VARCHAR(100)," +
+                  "`balance_currency` VARCHAR(100)," +
+                  "`balance_amount` DECIMAL(49,4)" +
                   ") ENGINE = INNODB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
     
     List<String> h2 = new ArrayList<>();
@@ -93,6 +113,26 @@ public class SaveManager {
     h2.add("CREATE TABLE IF NOT EXISTS `hellco_version` (" +
                   "`id` INTEGER NOT NULL UNIQUE," +
                   "`version_value` VARCHAR(15)" +
+                  ") ENGINE = INNODB;");
+
+    h2.add("CREATE TABLE IF NOT EXISTS `hellco_ids` (" +
+                  "`uuid` VARCHAR(36) UNIQUE," +
+                  "`display` VARCHAR(100)" +
+                  ") ENGINE = INNODB;");
+
+    h2.add("CREATE TABLE IF NOT EXISTS `hellco_accounts` (" +
+                  "`account_id` VARCHAR(36) NOT NULL UNIQUE," +
+                  "`account_display` VARCHAR(100)," +
+                  "`account_created` BIGINT(60)," +
+                  "`account_player` BOOLEAN" +
+                  ") ENGINE = INNODB;");
+
+    h2.add("CREATE TABLE IF NOT EXISTS `hellco_balances` (" +
+                  "`balance_owner` VARCHAR(36) NOT NULL UNIQUE," +
+                  "`balance_server` VARCHAR(100)," +
+                  "`balance_world` VARCHAR(100)," +
+                  "`balance_currency` VARCHAR(100)," +
+                  "`balance_amount` DECIMAL(49,4)" +
                   ") ENGINE = INNODB;");
 
     dataTables.put("mysql", mysql);
@@ -118,6 +158,14 @@ public class SaveManager {
 
   }
 
+  public DB getDb() {
+    return db;
+  }
+
+  public HikariDataSource getDataSource() {
+    return dataSource;
+  }
+
   public void open() {
     try {
       db.open(dataSource);
@@ -126,7 +174,9 @@ public class SaveManager {
   }
 
   public void close() {
-    db.close();
+    if(db.hasConnection()) {
+      db.close();
+    }
   }
 
   public void addProvider(String type, DataProvider provider) {

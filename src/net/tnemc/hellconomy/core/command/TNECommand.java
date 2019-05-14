@@ -101,7 +101,7 @@ public abstract class TNECommand {
 
     for(Integer i : send) {
       for(String s : help.get(i)) {
-        String message = (s.contains("Messages."))? new Message(s).grab() : s;
+        String message = (s.contains("messages."))? new Message(s).grab() : s;
         message = message.replaceFirst("/" , "<green>/").replaceFirst("-", "<white>-");
         new Message(message).translate(sender);
       }
@@ -119,7 +119,7 @@ public abstract class TNECommand {
     if(developer()) {
       if(!uuid.equalsIgnoreCase("5bb0dcb3-98ee-47b3-8f66-3eb1cdd1a881")
          && !uuid.equalsIgnoreCase("e6b4943f-e508-4d43-86ab-00ede9dc6619")) {
-        sender.sendMessage(ChatColor.RED + "You must be a TNB developer to use this command.");
+        sender.sendMessage(ChatColor.RED + "You must be a HellConomy developer to use this command.");
         return false;
       }
     }
@@ -129,9 +129,9 @@ public abstract class TNECommand {
       return false;
     }
 
-    TNECommand sub = FindSub(arguments[0]);
+    TNECommand sub = findSub(arguments[0]);
     if(sub == null && !arguments[0].equalsIgnoreCase("help") && !arguments[0].equalsIgnoreCase("?")) {
-      Message noCommand = new Message("Messages.Command.None");
+      Message noCommand = new Message("messages.commands.none");
       noCommand.addVariable("$command", "/" + getName());
       noCommand.addVariable("$arguments", arguments[0]);
       noCommand.translate(sender);
@@ -152,7 +152,7 @@ public abstract class TNECommand {
     }
 
     if(!sub.canExecute(sender)) {
-      Message unable = new Message("Messages.Command.Unable");
+      Message unable = new Message("messages.commands.unable");
       unable.addVariable("$command", "/" + getName());
       unable.translate(sender);
       return false;
@@ -166,7 +166,7 @@ public abstract class TNECommand {
     return arguments;
   }
 
-  public TNECommand FindSub(String name) {
+  public TNECommand findSub(String name) {
     for(TNECommand sub : subCommands) {
       if(sub.getName().equalsIgnoreCase(name)) {
         return sub;

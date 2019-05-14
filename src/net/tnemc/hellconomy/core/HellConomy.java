@@ -25,6 +25,7 @@ import net.tnemc.hellconomy.core.utils.Metrics;
 import net.tnemc.hellconomy.core.world.WorldManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
@@ -33,7 +34,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -103,14 +103,24 @@ public class HellConomy extends JavaPlugin {
 
     System.out.println("Config Null: " + (mapper.getConfigurationByID("world_sharing") == null));
 
-    mapper.getConfigurationByID("world_sharing").getSection("world_sharing").getKeys().forEach((world)->{
+    /*mapper.getConfigurationByID("world_sharing").getSection("world_sharing").getKeys().forEach((world)->{
       final List<String> shared = mapper.getConfigurationByID("world_sharing").getStringList("world_sharing." + world);
 
       addWorldManager(new WorldManager(world, world));
       for(String worldName : shared) {
         addWorldManager(new WorldManager(worldName, world));
       }
-    });
+    });*/
+
+    for(World world : Bukkit.getWorlds()) {
+      final String name = world.getName();
+      addWorldManager(new WorldManager(name, name));
+      if(mapper.getConfigurationByID("world_sharing").contains("world_sharing." + name)) {
+        for(String sharing : mapper.getConfigurationByID("world_sharing").getStringList("world_sharing." + name)) {
+          addWorldManager(new WorldManager(sharing, name));
+        }
+      }
+    }
 
     commandManager = new CommandManager();
 

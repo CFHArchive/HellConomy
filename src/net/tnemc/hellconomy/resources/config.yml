@@ -34,6 +34,18 @@ currency:
   #The symbol of the currency.
   symbol: "$"
 
+  #The singular form of this currency's major denomination.
+  major_single: "Dollar"
+
+  #The plural form of this currency's major denomination.
+  major_plural: "Dollars"
+
+  #The singular form of this currency's minor denomination.
+  minor_single: "Cent"
+
+  #The plural form of this currency's minor denomination.
+  minor_plural: "Cents"
+
   #The SI Prefixes used when <shorten> is used for the currency's format.
   #TNE's default prefixes are based off of the Internation Bureau of Weights and Measures official list.
   #http://www.unitarium.com/si-prefixes along with a few addition shorts for above Nonillion.

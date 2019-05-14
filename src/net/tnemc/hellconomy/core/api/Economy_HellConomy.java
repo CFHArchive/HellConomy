@@ -66,22 +66,34 @@ public class Economy_HellConomy implements Economy {
   @Override
   public boolean hasAccount(String username) {
     //TNE.debug("Economy_TheNewEconomy.hasAccount:" + username + " Has?" + api.hasAccount(username));
-    return api.hasAccount(username);
+    HellConomy.instance().saveManager().open();
+    final boolean exists = api.hasAccount(username);
+    HellConomy.instance().saveManager().close();
+    return exists;
   }
 
   @Override
   public boolean hasAccount(OfflinePlayer offlinePlayer) {
-    return api.hasAccount(offlinePlayer.getUniqueId().toString());
+    HellConomy.instance().saveManager().open();
+    final boolean exists = api.hasAccount(offlinePlayer.getUniqueId().toString());
+    HellConomy.instance().saveManager().close();
+    return exists;
   }
 
   @Override
   public boolean hasAccount(String username, String world) {
-    return api.hasAccount(username);
+    HellConomy.instance().saveManager().open();
+    final boolean exists = api.hasAccount(username);
+    HellConomy.instance().saveManager().close();
+    return exists;
   }
 
   @Override
   public boolean hasAccount(OfflinePlayer offlinePlayer, String world) {
-    return api.hasAccount(offlinePlayer.getUniqueId().toString());
+    HellConomy.instance().saveManager().open();
+    final boolean exists = api.hasAccount(offlinePlayer.getUniqueId().toString());
+    HellConomy.instance().saveManager().close();
+    return exists;
   }
 
   @Override
@@ -96,7 +108,10 @@ public class Economy_HellConomy implements Economy {
 
   @Override
   public double getBalance(String username, String world) {
-    return api.getHoldings(username, world).doubleValue();
+    HellConomy.instance().saveManager().open();
+    final double balance = api.getHoldings(username, world).doubleValue();
+    HellConomy.instance().saveManager().close();
+    return balance;
   }
 
   @Override
@@ -120,7 +135,10 @@ public class Economy_HellConomy implements Economy {
   public boolean has(String username, String world, double amount) {
     //TNE.debug("Economy_TheNewEconomy.has(username, world, amount)");
     //TNE.debug("Amount: " + amount);
-    return api.hasHoldings(username, new BigDecimal(amount + ""), world);
+    HellConomy.instance().saveManager().open();
+    final boolean has = api.hasHoldings(username, new BigDecimal(amount + ""), world);
+    HellConomy.instance().saveManager().close();
+    return has;
   }
 
   @Override
@@ -151,7 +169,12 @@ public class Economy_HellConomy implements Economy {
     if(!has(username, world, amount)) {
       return new EconomyResponse(0, 0, EconomyResponse.ResponseType.FAILURE, "Insufficient funds!");
     }
-    if(api.removeHoldings(username, new BigDecimal(amount + ""), world)) {
+
+    HellConomy.instance().saveManager().open();
+    final boolean remove = api.removeHoldings(username, new BigDecimal(amount + ""), world);
+    HellConomy.instance().saveManager().close();
+    if(remove) {
+
       return new EconomyResponse(amount, getBalance(username, world), EconomyResponse.ResponseType.SUCCESS, "");
     }
     return new EconomyResponse(amount, getBalance(username, world), EconomyResponse.ResponseType.FAILURE, "Unable to complete transaction!");
@@ -181,7 +204,11 @@ public class Economy_HellConomy implements Economy {
     if(amount < 0) {
       return new EconomyResponse(0, 0, EconomyResponse.ResponseType.FAILURE, "Cannot deposit negative amounts.");
     }
-    if(api.addHoldings(username, new BigDecimal(amount + ""), world)) {
+    HellConomy.instance().saveManager().open();
+    final boolean add = api.addHoldings(username, new BigDecimal(amount + ""), world);
+    HellConomy.instance().saveManager().close();
+
+    if(add) {
       return new EconomyResponse(amount, getBalance(username, world), EconomyResponse.ResponseType.SUCCESS, "");
     }
     return new EconomyResponse(amount, getBalance(username, world), EconomyResponse.ResponseType.FAILURE, "Unable to complete transaction!");
@@ -259,16 +286,25 @@ public class Economy_HellConomy implements Economy {
 
   @Override
   public boolean createPlayerAccount(OfflinePlayer offlinePlayer) {
-    return api.createAccount(offlinePlayer.getUniqueId().toString());
+    HellConomy.instance().saveManager().open();
+    final boolean created = api.createAccount(offlinePlayer.getUniqueId().toString());
+    HellConomy.instance().saveManager().close();
+    return created;
   }
 
   @Override
   public boolean createPlayerAccount(String username, String world) {
-    return api.createAccount(username);
+    HellConomy.instance().saveManager().open();
+    final boolean created = api.createAccount(username);
+    HellConomy.instance().saveManager().close();
+    return created;
   }
 
   @Override
   public boolean createPlayerAccount(OfflinePlayer offlinePlayer, String world) {
-    return api.createAccount(offlinePlayer.getUniqueId().toString());
+    HellConomy.instance().saveManager().open();
+    final boolean created = api.createAccount(offlinePlayer.getUniqueId().toString());
+    HellConomy.instance().saveManager().close();
+    return created;
   }
 }

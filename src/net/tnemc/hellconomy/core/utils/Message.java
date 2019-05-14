@@ -1,5 +1,6 @@
 package net.tnemc.hellconomy.core.utils;
 
+import net.tnemc.hellconomy.core.HellConomy;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -77,8 +78,9 @@ public class Message {
   }
 
   public String grab() {
+    String found = HellConomy.mapper().getConfigurationByID("messages").getString(this.node);
 
-    String message = this.node;
+    String message = (found == null || found.trim().equalsIgnoreCase(""))? this.node : found;
     Iterator<Map.Entry<String, String>> it = variables.entrySet().iterator();
 
     while (it.hasNext()) {
@@ -112,8 +114,9 @@ public class Message {
 
   public void translate(CommandSender sender) {
     if(sender == null) return;
+    String found = HellConomy.mapper().getConfigurationByID("messages").getString(this.node);
 
-    String[] message = new String[] { this.node };
+    String[] message = (found == null || found.trim().equalsIgnoreCase(""))? new String[] { this.node } : found.split("<newline>");
     for(String s : message) {
       String send = s;
       if (!send.equals(this.node)) {
@@ -127,5 +130,27 @@ public class Message {
       Boolean strip = !(sender instanceof Player);
       sender.sendMessage(replaceColours(send, strip));
     }
+  }
+
+  public String[] format(String world, CommandSender sender, String id) {
+    String found = HellConomy.mapper().getConfigurationByID("messages").getString(this.node);
+
+    String[] message = (found == null || found.trim().equalsIgnoreCase(""))? new String[] { this.node } : found.split("<newline>");
+    String[] formatted = new String[message.length];
+
+    for(int i = 0; i < message.length; i++) {
+      String send = message[i];
+      if (!send.equals(this.node)) {
+        Iterator<Map.Entry<String, String>> it = variables.entrySet().iterator();
+
+        while (it.hasNext()) {
+          Map.Entry<String, String> entry = it.next();
+          send = send.replace(entry.getKey(), entry.getValue());
+        }
+      }
+      Boolean strip = !(sender instanceof Player);
+      formatted[i] = replaceColours(send, strip);
+    }
+    return formatted;
   }
 }

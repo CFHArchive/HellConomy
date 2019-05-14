@@ -35,7 +35,7 @@ public class WorldChangeListener implements Listener {
     final UUID id = player.getUniqueId();
     final String world = HellConomy.instance().normalizeWorld(player.getWorld().getName());
 
-    if(HellConomy.mapper().getBool("Core.Multiworld") &&
+    if(HellConomy.mapper().getBool("server.multi_world") &&
         !HellConomy.instance().getWorldManager(event.getFrom().getName()).getBalanceWorld().equalsIgnoreCase(world)) {
       HellConomy.instance().getWorldManager(world).getItemCurrencies().forEach(value -> {
         final HellCurrency currency = HellConomy.currencyManager().get(world, value);

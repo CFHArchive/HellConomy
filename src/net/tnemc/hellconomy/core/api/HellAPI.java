@@ -421,6 +421,54 @@ public class HellAPI {
   }
 
   /**
+   * Used to set funds for an account.
+   * @param identifier The identifier of the account. This may be a {@link UUID}, or a player's name.
+   * @param amount The amount you wish to set from this account.
+   * @return True if the funds were changed for the account, otherwise false.
+   */
+  public boolean setHoldings(String identifier, BigDecimal amount) {
+    Balance.setBalanceValue(getID(identifier), HellConomy.getServerName(), HellConomy.instance().getDefaultWorld(), HellConomy.currencyManager().get(HellConomy.instance().getDefaultWorld()).name(), amount);
+    return true;
+  }
+
+  /**
+   * Used to set funds for an account.
+   * @param identifier The identifier of the account. This may be a {@link UUID}, or a player's name.
+   * @param amount The amount you wish to set from this account.
+   * @param world The name of the {@link World} associated with the amount.
+   * @return True if the funds were changed for the account, otherwise false.
+   */
+  public boolean setHoldings(String identifier, BigDecimal amount, String world) {
+    Balance.setBalanceValue(getID(identifier), HellConomy.getServerName(), world, HellConomy.currencyManager().get(world).name(), amount);
+    return true;
+  }
+
+  /**
+   * Used to set funds for an account.
+   * @param identifier The identifier of the account. This may be a {@link UUID}, or a player's name.
+   * @param amount The amount you wish to set from this account.
+   * @param currency The {@link HellCurrency} object associated with the amount.
+   * @return True if the funds were changed for the account, otherwise false.
+   */
+  public boolean setHoldings(String identifier, BigDecimal amount, HellCurrency currency) {
+    Balance.setBalanceValue(getID(identifier), HellConomy.getServerName(), HellConomy.instance().getDefaultWorld(), currency.name(), amount);
+    return true;
+  }
+
+  /**
+   * Used to set funds for an account.
+   * @param identifier The identifier of the account. This may be a {@link UUID}, or a player's name.
+   * @param amount The amount you wish to set from this account.
+   * @param currency The {@link HellCurrency} object associated with the amount.
+   * @param world The name of the {@link World} associated with the amount.
+   * @return True if the funds were changed for the account, otherwise false.
+   */
+  public boolean setHoldings(String identifier, BigDecimal amount, HellCurrency currency, String world) {
+    Balance.setBalanceValue(getID(identifier), HellConomy.getServerName(), world, currency.name(), amount);
+    return true;
+  }
+
+  /**
    * Used to remove funds from an account.
    * @param identifier The identifier of the account. This may be a {@link UUID}, or a player's name.
    * @param amount The amount you wish to remove from this account.
@@ -603,10 +651,13 @@ public class HellAPI {
     if(isUUID(identifier)) return UUID.fromString(identifier);
 
     final OfflinePlayer player = Bukkit.getPlayer(identifier);
-    if(player != null) return player.getUniqueId();
+    if(player != null) {
+      //System.out.println("ID: " + player.getUniqueId().toString());
+      //System.out.println("Has Account?: " + HellAccount.exists(player.getUniqueId()));
+      return player.getUniqueId();
+    }
 
     UUID id = null;
-    HellConomy.instance().saveManager().open();
     if(IDStorage.exists(identifier)) {
       id = IDStorage.getID(identifier);
     }
@@ -615,7 +666,6 @@ public class HellAPI {
       id = IDStorage.freeID();
       IDStorage.add(id, identifier);
     }
-    HellConomy.instance().saveManager().close();
 
     return id;
   }

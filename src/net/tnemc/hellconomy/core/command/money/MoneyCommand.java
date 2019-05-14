@@ -2,6 +2,7 @@ package net.tnemc.hellconomy.core.command.money;
 
 import net.tnemc.hellconomy.core.HellConomy;
 import net.tnemc.hellconomy.core.command.TNECommand;
+import org.bukkit.command.CommandSender;
 
 /**
  * Created by creatorfromhell.
@@ -18,6 +19,7 @@ public class MoneyCommand extends TNECommand {
 
     subCommands.add(new MoneyBalanceCommand(plugin));
     subCommands.add(new MoneyGiveCommand(plugin));
+    subCommands.add(new MoneyOtherCommand(plugin));
     subCommands.add(new MoneyPayCommand(plugin));
     subCommands.add(new MoneySetCommand(plugin));
     subCommands.add(new MoneyTakeCommand(plugin));
@@ -32,7 +34,10 @@ public class MoneyCommand extends TNECommand {
   @Override
   public String[] getAliases() {
     return new String[] {
-        "money"
+        "bal", "balance", "pay", "baltop",
+        "givemoney", "givebal", "setbal",
+        "setmoney", "takemoney", "takebal",
+        "balo", "balother"
     };
   }
 
@@ -44,5 +49,65 @@ public class MoneyCommand extends TNECommand {
   @Override
   public boolean console() {
     return true;
+  }
+
+  @Override
+  public boolean execute(CommandSender sender, String command, String[] arguments) {
+    if(command.equalsIgnoreCase("givemoney") ||
+        command.equalsIgnoreCase("givebal")) {
+      TNECommand sub = findSub("give");
+      if(sub.canExecute(sender)) {
+        return sub.execute(sender, command, arguments);
+      }
+    }
+
+    if(command.equalsIgnoreCase("setmoney") ||
+        command.equalsIgnoreCase("setbal")) {
+      TNECommand sub = findSub("set");
+      if(sub.canExecute(sender)) {
+        return sub.execute(sender, command, arguments);
+      }
+    }
+
+    if(command.equalsIgnoreCase("takemoney") ||
+        command.equalsIgnoreCase("takebal")) {
+      TNECommand sub = findSub("take");
+      if(sub.canExecute(sender)) {
+        return sub.execute(sender, command, arguments);
+      }
+    }
+
+    if(command.equalsIgnoreCase("baltop")) {
+      TNECommand sub = findSub("top");
+      if(sub.canExecute(sender)) {
+        return sub.execute(sender, command, arguments);
+      }
+    }
+
+    if(command.equalsIgnoreCase("pay")) {
+      TNECommand sub = findSub("pay");
+      if(sub.canExecute(sender)) {
+        return sub.execute(sender, command, arguments);
+      }
+    }
+
+    if(command.equalsIgnoreCase("balance") ||
+        command.equalsIgnoreCase("bal") ||
+        arguments.length == 0) {
+      TNECommand sub = findSub("balance");
+      if(sub.canExecute(sender)) {
+        return sub.execute(sender, command, arguments);
+      }
+    }
+
+    if(command.equalsIgnoreCase("balother") ||
+        command.equalsIgnoreCase("balo") ||
+        arguments.length == 0) {
+      TNECommand sub = findSub("other");
+      if(sub.canExecute(sender)) {
+        return sub.execute(sender, command, arguments);
+      }
+    }
+    return super.execute(sender, command, arguments);
   }
 }

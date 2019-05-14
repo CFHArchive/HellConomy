@@ -39,7 +39,7 @@ public class HellAccount extends Model {
     boolean exists = exists(id);
     HellAccount account = (exists)? getAccount(id) : new HellAccount();
 
-    if(!exists) account.set("account_id", freeID().toString());
+    if(!exists) account.set("account_id", id);
     account.set("account_display", display);
     if(!exists) account.set("account_created", created);
     if(!exists) account.set("account_player", player);

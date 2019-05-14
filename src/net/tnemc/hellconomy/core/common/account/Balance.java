@@ -1,5 +1,10 @@
 package net.tnemc.hellconomy.core.common.account;
 
+import net.tnemc.hellconomy.core.HellConomy;
+import net.tnemc.hellconomy.core.currency.HellCurrency;
+import net.tnemc.hellconomy.core.currency.ItemCalculations;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.javalite.activejdbc.Model;
 import org.javalite.activejdbc.annotations.CompositePK;
 import org.javalite.activejdbc.annotations.DbName;
@@ -50,7 +55,13 @@ public class Balance extends Model {
     final BigDecimal result = (exists(owner, server, world, currency))? getBalanceValue(owner, server, world, currency).add(amount) : amount;
 
     add(owner, server, world, currency, result);
-
+    final Player player = Bukkit.getPlayer(owner);
+    if(player != null) {
+      final HellCurrency curInstance = HellConomy.currencyManager().get(world, currency);
+      if(curInstance.isItem()) {
+        ItemCalculations.setItems(HellConomy.currencyManager().get(world, currency), result, player.getInventory(), false);
+      }
+    }
     return result;
   }
 
@@ -58,11 +69,33 @@ public class Balance extends Model {
     final BigDecimal result = (exists(owner, server, world, currency))? getBalanceValue(owner, server, world, currency).subtract(amount) : BigDecimal.ZERO;
 
     add(owner, server, world, currency, result);
+    final Player player = Bukkit.getPlayer(owner);
+    if(player != null) {
+      final HellCurrency curInstance = HellConomy.currencyManager().get(world, currency);
+      if(curInstance.isItem()) {
+        ItemCalculations.setItems(HellConomy.currencyManager().get(world, currency), amount, player.getInventory(), true);
+      }
+    }
 
     return result;
   }
 
+  public static void setBalanceValue(UUID owner, String server, String world, String currency, BigDecimal amount) {
+    final BigDecimal result = (exists(owner, server, world, currency))? getBalanceValue(owner, server, world, currency) : BigDecimal.ZERO;
+
+    final boolean add = result.compareTo(amount) < 0;
+
+    if(add) {
+      addBalanceValue(owner, server, world, currency, amount.subtract(result));
+    } else {
+      subBalanceValue(owner, server, world, currency, result.subtract(amount));
+    }
+  }
+
   public static BigDecimal getBalanceValue(UUID owner, String server, String world, String currency) {
+    if(!exists(owner, server, world, currency)) {
+      add(owner, server, world, currency, BigDecimal.ZERO);
+    }
     return getBalance(owner, server, world, currency).getBigDecimal("balance_amount");
   }
 

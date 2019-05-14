@@ -48,33 +48,32 @@ public class CurrencyManager {
 
   private void loadBasic() {
 
-    final String base = "Core.Currency.Basic";
+    final String base = "currency";
 
     //Currency Info Configurations.
-    final String server = HellConomy.mapper().getString(base + ".Info.Server", "Main Server");
-    final String single = HellConomy.mapper().getString(base + ".Major_Single", "Dollar");
-    final String plural = HellConomy.mapper().getString(base + ".Major_Plural", "Dollars");
-    final String singleMinor = HellConomy.mapper().getString(base + ".Minor_Single", "Cent");
-    final String pluralMinor = HellConomy.mapper().getString(base + ".Minor_Plural", "Cents");
-    final String prefixes = HellConomy.mapper().getString(base + ".Prefixes", "kMGTPEZYXWVUN₮").trim();
-    final String symbol = HellConomy.mapper().getString(base + ".Symbol", "$");
-    final Boolean item = HellConomy.mapper().getBool(base + ".ItemCurrency");
-    final Boolean experience = HellConomy.mapper().getBool(base + ".ExperienceCurrency");
+    final String server = HellConomy.mapper().getString("server.name", "Main Server");
+    final String single = HellConomy.mapper().getString(base + ".major_single", "Dollar");
+    final String plural = HellConomy.mapper().getString(base + ".major_plural", "Dollars");
+    final String singleMinor = HellConomy.mapper().getString(base + ".minor_single", "Cent");
+    final String pluralMinor = HellConomy.mapper().getString(base + ".minor_plural", "Cents");
+    final String prefixes = HellConomy.mapper().getString(base + ".prefixes", "kMGTPEZYXWVUN₮").trim();
+    final String symbol = HellConomy.mapper().getString(base + ".symbol", "$");
+    final Boolean item = HellConomy.mapper().getBool(base + ".item_currency");
 
     //Currency Options Configurations.
-    final String format = HellConomy.mapper().getString(base + ".Options.Format", "<symbol><major.amount><decimal><minor.amount>").trim();
-    final BigDecimal maxBalance = ((new BigDecimal(HellConomy.mapper().getString(base + ".Options.MaxBalance", largestSupported.toPlainString())).compareTo(largestSupported) > 0)? largestSupported : new BigDecimal(HellConomy.mapper().getString(base + ".MaxBalance", largestSupported.toPlainString())));
-    final BigDecimal balance = new BigDecimal(HellConomy.mapper().getString(base + ".Options.Balance", "200.00"));
-    final String decimal = HellConomy.mapper().getString(base + ".Options.Decimal", ".");
-    final Boolean ender = HellConomy.mapper().getBool(base + ".Options.EnderChest", true);
-    final Boolean separate = HellConomy.mapper().getBool(base + ".Options.Major_Separate", true);
-    final String separator = HellConomy.mapper().getString(base + ".Options.Major_Separator", ",");
-    final Integer minorWeight = HellConomy.mapper().getInt(base + ".Options.Minor_Weight", 100);
+    final String format = HellConomy.mapper().getString(base + ".format", "<symbol><major.amount><decimal><minor.amount>").trim();
+    final BigDecimal maxBalance = ((new BigDecimal(HellConomy.mapper().getString("account.max_balance", largestSupported.toPlainString())).compareTo(largestSupported) > 0)? largestSupported : new BigDecimal(HellConomy.mapper().getString(base + ".MaxBalance", largestSupported.toPlainString())));
+    final BigDecimal balance = new BigDecimal(HellConomy.mapper().getString("account.balance", "200.00"));
+    final String decimal = ".";
+    final Boolean ender = false;
+    final Boolean separate = true;
+    final String separator = ",";
+    final Integer minorWeight = 100;
 
     //Currency Note Configurations
-    final Boolean notable = HellConomy.mapper().getBool(base + ".Note.Notable", false);
-    final BigDecimal fee = new BigDecimal(HellConomy.mapper().getString(base + ".Note.Fee", "0.00"));
-    final BigDecimal minimum = new BigDecimal(HellConomy.mapper().getString(base + ".Note.Minimum", "0.00"));
+    final Boolean notable = false;
+    final BigDecimal fee = new BigDecimal("0.00");
+    final BigDecimal minimum = new BigDecimal("0.00");
 
     HellCurrency currency = new HellCurrency();
     currency.setServer(server);
@@ -89,12 +88,11 @@ public class CurrencyManager {
     currency.setPlural(plural);
     currency.setSingleMinor(singleMinor);
     currency.setPluralMinor(pluralMinor);
-    currency.setServer("Main Server");
     currency.setSymbol(symbol);
     currency.setWorldDefault(true);
     currency.setRate(1.0);
     currency.setItem(item);
-    currency.setXp(experience);
+    currency.setXp(false);
     currency.setNotable(notable);
     currency.setFee(fee);
     currency.setMinimum(minimum);
@@ -103,13 +101,13 @@ public class CurrencyManager {
     currency.setMajorSeparator(separator);
     currency.setMinorWeight(minorWeight);
 
-    loadBasicTiers(currency, HellConomy.mapper().getConfiguration("Core"), item);
+    loadBasicTiers(currency, HellConomy.mapper().getConfiguration("currency"), item);
 
     addCurrency(HellConomy.instance().getDefaultWorld(), currency);
   }
 
   private void loadBasicTiers(HellCurrency currency, CommentedConfiguration configuration, boolean item) {
-    final String baseNode = "Core.Currency.Basic." + ((item)? "Items" : "Virtual");
+    final String baseNode = "currency." + ((item)? "items" : "virtual");
     Set<String> tiers = configuration.getSection(baseNode).getKeys(false);
 
     for (String tierName : tiers) {
@@ -117,7 +115,7 @@ public class CurrencyManager {
       //Normal HellTier variables
       String unparsedValue = configuration.getString(baseNode + "." + tierName);
 
-      final String type = (unparsedValue.contains("."))? "Minor" : "Major";
+      final String type = (unparsedValue.contains("."))? "minor" : "major";
 
       if(type.equalsIgnoreCase("minor")) {
         unparsedValue = unparsedValue.split("\\.")[1];
@@ -225,7 +223,8 @@ public class CurrencyManager {
 
   public Collection<HellCurrency> getWorldCurrencies(String world) {
     //TNE.debug("=====START CurrencyManager =====");
-    //TNE.debug("World: " + world);
+    //System.out.println("World: " + world);
+    //System.out.println("Worlds: " + world);
     world = HellConomy.instance().getWorldManager(world).getBalanceWorld();
     return HellConomy.instance().getWorldManager(world).getCurrencies();
   }

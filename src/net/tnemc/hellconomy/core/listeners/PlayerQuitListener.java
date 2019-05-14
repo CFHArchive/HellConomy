@@ -33,9 +33,11 @@ public class PlayerQuitListener implements Listener {
     final UUID id = event.getPlayer().getUniqueId();
     final Player player = event.getPlayer();
     Bukkit.getScheduler().runTaskAsynchronously(HellConomy.instance(), ()->{
+      HellConomy.instance().saveManager().open();
       if(HellAccount.exists(id)) {
         HellAccount.saveItemCurrency(id, HellConomy.instance().normalizeWorld(player.getWorld().getName()), player.getInventory(), true);
       }
+      HellConomy.instance().saveManager().close();
     });
   }
 }

@@ -155,14 +155,13 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>1.4.196</version>
-            <type>jar</type>
+            <version>1.4.197</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>net.tnemc</groupId>
             <artifactId>TheNewConfigLibrary</artifactId>
-            <version>0.1.1.23</version>
+            <version>0.1.1.26</version>
         </dependency>
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
