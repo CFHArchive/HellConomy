@@ -111,6 +111,32 @@ world_sharing:
     - "example_4"
     - "example_5"
 
+#Options related to conversion from other economy plugins.
+conversion:
+
+  #The format of the data you're wishing to convert from.
+  format: MySQL
+
+  #File name, with extension, for any DB type which requires a file.
+  file: Example.db
+
+  options:
+
+    #The host for the database.
+    host: localhost
+
+    #The port for the database.
+    port: '3306'
+
+    #The name of the database to use for storage
+    db: minecraft
+
+    #The name of the user for the database
+    user: username
+
+    #The password for the database user
+    password: password
+
 
 #Database configurations
 database:

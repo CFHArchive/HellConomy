@@ -5,6 +5,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import net.tnemc.hellconomy.core.HellConomy;
 import net.tnemc.hellconomy.core.data.impl.H2;
 import net.tnemc.hellconomy.core.data.impl.MySQL;
+import net.tnemc.hellconomy.core.data.impl.SQLite;
 import org.javalite.activejdbc.DB;
 
 import java.io.File;
@@ -54,6 +55,7 @@ public class SaveManager {
     //Initialize DataProviders.
     providers.put("mysql", new MySQL());
     providers.put("h2", new H2());
+    providers.put("sqlite", new SQLite());
 
     config = new HikariConfig();
 
@@ -177,6 +179,10 @@ public class SaveManager {
     if(db.hasConnection()) {
       db.close();
     }
+  }
+
+  public Map<String, DataProvider> getProviders() {
+    return providers;
   }
 
   public void addProvider(String type, DataProvider provider) {

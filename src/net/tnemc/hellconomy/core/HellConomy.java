@@ -6,6 +6,7 @@ import net.tnemc.hellconomy.core.api.HellAPI;
 import net.tnemc.hellconomy.core.command.CommandManager;
 import net.tnemc.hellconomy.core.command.TNECommand;
 import net.tnemc.hellconomy.core.command.account.AccountCommand;
+import net.tnemc.hellconomy.core.command.convert.ConvertCommand;
 import net.tnemc.hellconomy.core.command.money.MoneyCommand;
 import net.tnemc.hellconomy.core.common.configuration.ConfigurationMapper;
 import net.tnemc.hellconomy.core.compatibility.ItemCompatibility;
@@ -141,6 +142,7 @@ public class HellConomy extends JavaPlugin {
     saveManager.close();
     //Register Commands.
     registerCommand(new String[]{"account", "acc"}, new AccountCommand(this));
+    registerCommand(new String[]{"convert"}, new ConvertCommand(this));
     registerCommand(new String[]{
         "money", "bal", "balance", "pay", "baltop",
         "givemoney", "givebal", "setbal",
@@ -247,6 +249,14 @@ public class HellConomy extends JavaPlugin {
 
   public static CurrencyManager currencyManager() {
     return instance.currencyManager;
+  }
+
+  public static void debug(Exception e) {
+
+  }
+
+  public static void debug(String message) {
+
   }
 
 

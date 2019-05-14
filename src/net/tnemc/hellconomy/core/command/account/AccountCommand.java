@@ -18,6 +18,7 @@ public class AccountCommand extends TNECommand {
 
     subCommands.add(new AccountCreateCommand(plugin));
     subCommands.add(new AccountDeleteCommand(plugin));
+    subCommands.add(new AccountImportCommand(plugin));
   }
 
   @Override

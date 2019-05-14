@@ -1,6 +1,16 @@
 package net.tnemc.hellconomy.core.utils;
 
+import net.tnemc.hellconomy.core.HellConomy;
+import net.tnemc.hellconomy.core.api.HellAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import java.io.File;
+import java.math.BigDecimal;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * Created by creatorfromhell.
@@ -53,5 +63,32 @@ public class MISCUtils {
 
   public static boolean offHand() {
     return isOneNine() || isOneTen() || isOneEleven() || isOneTwelve() || isOneThirteen();
+  }
+
+  public static void restore(CommandSender sender) {
+    File file = new File(HellConomy.instance().getDataFolder(), "extracted.yml");
+    YamlConfiguration original = YamlConfiguration.loadConfiguration(file);
+    YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+    Set<String> accounts = configuration.getConfigurationSection("Accounts").getKeys(false);
+
+    HellConomy.instance().saveManager().open();
+    accounts.forEach((username) -> {
+      String reformattedUsername = username.replaceAll("\\!", ".").replaceAll("\\@", "-").replaceAll("\\%", "_");
+      if(reformattedUsername.equalsIgnoreCase("server account")) reformattedUsername = "Server_Account";
+      UUID id = HellAPI.getID(reformattedUsername);
+      HellConomy.api().getOrCreate(id);
+      Set<String> worlds = configuration.getConfigurationSection("Accounts." + username + ".Balances").getKeys(false);
+      worlds.forEach((world) -> {
+        Set<String> currencies = configuration.getConfigurationSection("Accounts." + username + ".Balances." + world).getKeys(false);
+        currencies.forEach((currency) -> {
+          String finalCurrency = (currency.equalsIgnoreCase("default"))? HellConomy.currencyManager().get(world).name() : currency;
+          String balance = original.getString("Accounts." + username + ".Balances." + world + "." + currency);
+          HellConomy.api().setHoldings(id.toString(), new BigDecimal(balance), HellConomy.currencyManager().get(world, finalCurrency), world);
+        });
+      });
+    });
+    HellConomy.instance().saveManager().open();
+
+    sender.sendMessage(ChatColor.WHITE + "Restored accounts from extracted.yml.");
   }
 }

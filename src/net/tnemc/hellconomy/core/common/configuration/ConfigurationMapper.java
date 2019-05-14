@@ -26,7 +26,7 @@ public class ConfigurationMapper {
 
   public void initialize() {
     try {
-      initializeFile("config.yml", "main", "server", "account", "currency", "world_sharing", "database");
+      initializeFile("config.yml", "main", "server", "account", "currency", "world_sharing", "conversion", "database");
       initializeFile("messages.yml", "messages");
 
       //System.out.println("Configurations Size: " + configurations.size());
