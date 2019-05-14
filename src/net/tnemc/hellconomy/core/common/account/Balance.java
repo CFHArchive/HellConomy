@@ -6,6 +6,7 @@ import net.tnemc.hellconomy.core.currency.ItemCalculations;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.javalite.activejdbc.Model;
+import org.javalite.activejdbc.Paginator;
 import org.javalite.activejdbc.annotations.CompositePK;
 import org.javalite.activejdbc.annotations.DbName;
 import org.javalite.activejdbc.annotations.Table;
@@ -109,5 +110,9 @@ public class Balance extends Model {
 
   public static void delete(UUID owner, String server, String world, String currency) {
     Balance.delete("balance_owner = ? AND balance_server = ? AND balance_world = ? AND balance_currency = ?", owner.toString(), server, world, currency);
+  }
+
+  public static Paginator getBalTop(String world) {
+    return new Paginator(Balance.class, 10, "balance_world = ?", world).orderBy("balance_amount desc");
   }
 }

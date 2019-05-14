@@ -664,6 +664,7 @@ public class HellAPI {
 
     if(id == null) {
       id = IDStorage.freeID();
+      //System.out.println("Adding UUID for identifier: " + identifier);
       IDStorage.add(id, identifier);
     }
 
@@ -671,12 +672,16 @@ public class HellAPI {
   }
 
   public static String getUsername(String identifier) {
+    //System.out.println("getUsername");
     if(isUUID(identifier)) {
       final UUID id = getID(identifier);
       final OfflinePlayer player = Bukkit.getOfflinePlayer(id);
-      if(player != null) {
+      //System.out.println("checking player status");
+      if(player != null && player.getName() != null) {
+        //System.out.println("returning player name");
         return player.getName();
       }
+      //System.out.println("returning from IDStorage");
       return IDStorage.getStorage(id).getString("display");
     }
     return identifier;

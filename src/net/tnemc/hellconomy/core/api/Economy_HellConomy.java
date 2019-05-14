@@ -281,7 +281,10 @@ public class Economy_HellConomy implements Economy {
 
   @Override
   public boolean createPlayerAccount(String username) {
-    return api.createAccount(username);
+    HellConomy.instance().saveManager().open();
+    final boolean created = api.createAccount(username);
+    HellConomy.instance().saveManager().close();
+    return created;
   }
 
   @Override

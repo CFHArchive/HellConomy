@@ -46,6 +46,7 @@ messages:
           pay: "/money pay <player> <amount> [world] - Displays the holdings of another account."
           set: "/money set <player> <amount> [world] - Set the holdings of an account."
           take: "/money take <player> <amount> [world] - Removes money from your economy, specifically from an account's balance."
+          top: "/money top [page] - Displays the most wealthy accounts, optional page argument."
        account:
           create: "/account create <name> [balance] - Creates an account, with an optional starting balance."
           delete: "/account delete <name> - Deletes an account."

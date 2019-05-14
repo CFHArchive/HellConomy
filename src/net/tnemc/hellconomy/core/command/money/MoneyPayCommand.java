@@ -76,6 +76,12 @@ public class MoneyPayCommand extends TNECommand {
       return false;
     }
 
+    if(amount.compareTo(BigDecimal.ZERO) < 1) {
+      HellConomy.instance().saveManager().close();
+      sender.sendMessage(ChatColor.RED + "Amount must be a greater than 0.");
+      return false;
+    }
+
     String world = (sender instanceof Player)? getPlayer(sender).getWorld().getName() : HellConomy.instance().getDefaultWorld();
     if(arguments.length > 2) {
       world = arguments[2];
