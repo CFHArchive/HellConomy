@@ -1,8 +1,10 @@
 package net.tnemc.hellconomy.core.command.money;
 
 import net.tnemc.hellconomy.core.HellConomy;
+import net.tnemc.hellconomy.core.api.HellAPI;
 import net.tnemc.hellconomy.core.command.TNECommand;
 import net.tnemc.hellconomy.core.currency.CurrencyFormatter;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -47,7 +49,7 @@ public class MoneyPayCommand extends TNECommand {
 
   @Override
   public String getHelp() {
-    return "messages.commands.money.take";
+    return "messages.commands.money.pay";
   }
 
   @Override
@@ -79,15 +81,25 @@ public class MoneyPayCommand extends TNECommand {
       world = arguments[2];
     }
 
-    final boolean has = HellConomy.api().hasHoldings(arguments[0], amount, world);
+    final String identifier = getPlayer(sender).getUniqueId().toString();
 
-    if(has) {
-      HellConomy.api().removeHoldings(arguments[0], amount, world);
-      sender.sendMessage(ChatColor.GOLD + "Successfully took " + CurrencyFormatter.format(world, amount) + " from \"" + arguments[0] + "\".");
-    } else {
-      HellConomy.api().removeHoldings(arguments[0], HellConomy.api().getHoldings(arguments[0], world), world);
-      sender.sendMessage(ChatColor.GOLD + "Successfully set \"" + arguments[0] + "\"'s balance to zero.");
+    if(!HellConomy.api().hasHoldings(identifier, amount, world)) {
+      sender.sendMessage(ChatColor.RED + "Insufficient funds.");
+      HellConomy.instance().saveManager().close();
+      return false;
     }
+
+    HellConomy.api().removeHoldings(identifier, amount, world);
+    HellConomy.api().addHoldings(arguments[0], amount, world);
+
+    if(HellAPI.isPlayer(arguments[0])) {
+      final Player player = Bukkit.getPlayer(HellAPI.getID(arguments[0]));
+      if(player != null) {
+        player.sendMessage(ChatColor.GOLD + "You were paid " + CurrencyFormatter.format(world, amount) + " by \"" + getPlayer(sender).getDisplayName() + ChatColor.GOLD + "\".");
+      }
+    }
+
+    sender.sendMessage(ChatColor.GOLD + "Successfully paid " + CurrencyFormatter.format(world, amount) + " to \"" + arguments[0] + "\".");
     HellConomy.instance().saveManager().close();
     return true;
   }
