@@ -70,6 +70,10 @@ public class HellAccount extends Model {
     HellAccount.delete("account_id = ?", id.toString());
   }
 
+  public static void updateDisplay(final UUID identifier, final String display) {
+    getAccount(identifier).setString("account_display", display).saveIt();
+  }
+
   public static BigDecimal getHoldings(final UUID id, String world, HellCurrency currency, boolean database) {
     BigDecimal current = BigDecimal.ZERO;
     world = HellConomy.instance().getWorldManager(world).getBalanceWorld();

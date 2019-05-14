@@ -51,6 +51,10 @@ public class IDStorage extends Model {
     return UUID.fromString(getStorage(display).getString("uuid"));
   }
 
+  public static String getDisplay(UUID identifier) {
+    return getStorage(identifier).getString("display");
+  }
+
   public static void delete(UUID identifier) {
     IDStorage.delete("uuid = ?", identifier.toString());
   }

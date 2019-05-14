@@ -1,8 +1,15 @@
 package net.tnemc.hellconomy.core.command.account;
 
 import net.tnemc.hellconomy.core.HellConomy;
+import net.tnemc.hellconomy.core.api.HellAPI;
 import net.tnemc.hellconomy.core.command.TNECommand;
+import net.tnemc.hellconomy.core.common.account.HellAccount;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import java.math.BigDecimal;
+import java.util.UUID;
 
 /**
  * Created by creatorfromhell.
@@ -47,6 +54,42 @@ public class AccountCreateCommand extends TNECommand {
 
   @Override
   public boolean execute(CommandSender sender, String command, String[] arguments) {
-    return false;
+
+    if(arguments.length < 1) {
+      help(sender);
+      return false;
+    }
+
+    HellConomy.instance().saveManager().open();
+    if(HellConomy.api().hasAccount(arguments[0])) {
+      sender.sendMessage(ChatColor.RED + "Account with the name \"" + arguments[0] + "\" already exists.");
+      HellConomy.instance().saveManager().close();
+      return false;
+    }
+
+    final String world = (sender instanceof Player)? getPlayer(sender).getWorld().getName() : HellConomy.instance().getDefaultWorld();
+
+    BigDecimal amount = BigDecimal.ZERO;
+    if(arguments.length > 1) {
+      try {
+        amount = new BigDecimal(arguments[1]);
+      } catch(Exception e) {
+        HellConomy.instance().saveManager().close();
+        sender.sendMessage(ChatColor.RED + "Amount must be a valid decimal.");
+        return false;
+      }
+    }
+
+    final UUID id = HellAPI.getID(arguments[0]);
+    HellConomy.api().createAccount(id);
+    HellAccount.initializeHoldings(id, HellConomy.instance().normalizeWorld(world));
+
+    if(arguments.length > 1) {
+      HellConomy.api().setHoldings(id.toString(), amount);
+    }
+
+    sender.sendMessage(ChatColor.GOLD + "Successfully created the account for \"" + arguments[0] + "\".");
+    HellConomy.instance().saveManager().close();
+    return true;
   }
 }

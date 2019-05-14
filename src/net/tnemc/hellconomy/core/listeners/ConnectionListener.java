@@ -2,6 +2,7 @@ package net.tnemc.hellconomy.core.listeners;
 
 import net.tnemc.hellconomy.core.HellConomy;
 import net.tnemc.hellconomy.core.common.account.HellAccount;
+import net.tnemc.hellconomy.core.common.account.IDStorage;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -34,6 +35,15 @@ public class ConnectionListener implements Listener {
     HellConomy.instance().saveManager().open();
     if(!HellAccount.exists(id)) {
       HellAccount.add(id, name, new Date().getTime(), true);
+      IDStorage.add(id, name);
+    } else {
+      if(IDStorage.exists(id)) {
+        final String display = IDStorage.getDisplay(id);
+        if(!display.equalsIgnoreCase(name)) {
+          IDStorage.add(id, name);
+          HellAccount.updateDisplay(id, name);
+        }
+      }
     }
     HellConomy.instance().saveManager().close();
   }

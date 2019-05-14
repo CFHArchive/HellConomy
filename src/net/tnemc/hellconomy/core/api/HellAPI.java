@@ -187,7 +187,7 @@ public class HellAPI {
    * @return The instance of the account.
    */
   public HellAccount getOrCreate(String identifier) {
-    final UUID id = (isUUID(identifier))? UUID.fromString(identifier) : Bukkit.getOfflinePlayer(identifier).getUniqueId();
+    final UUID id = getID(identifier);
     if(!hasAccount(id)) createAccount(id);
     return getAccount(id);
   }
