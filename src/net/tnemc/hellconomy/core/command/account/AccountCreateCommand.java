@@ -41,6 +41,11 @@ public class AccountCreateCommand extends TNECommand {
   }
 
   @Override
+  public String getHelp() {
+    return "messages.commands.account.create";
+  }
+
+  @Override
   public boolean execute(CommandSender sender, String command, String[] arguments) {
     return false;
   }

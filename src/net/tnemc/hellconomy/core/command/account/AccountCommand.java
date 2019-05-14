@@ -16,7 +16,6 @@ public class AccountCommand extends TNECommand {
   public AccountCommand(HellConomy plugin) {
     super(plugin);
 
-    subCommands.add(new AccountBalanceCommand(plugin));
     subCommands.add(new AccountCreateCommand(plugin));
     subCommands.add(new AccountDeleteCommand(plugin));
   }

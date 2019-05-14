@@ -1,8 +1,14 @@
 package net.tnemc.hellconomy.core.command.account;
 
 import net.tnemc.hellconomy.core.HellConomy;
+import net.tnemc.hellconomy.core.api.HellAPI;
 import net.tnemc.hellconomy.core.command.TNECommand;
+import net.tnemc.hellconomy.core.common.account.HellAccount;
+import net.tnemc.hellconomy.core.common.account.IDStorage;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+
+import java.util.UUID;
 
 /**
  * Created by creatorfromhell.
@@ -41,7 +47,31 @@ public class AccountDeleteCommand extends TNECommand {
   }
 
   @Override
+  public String getHelp() {
+    return "messages.commands.account.delete";
+  }
+
+  @Override
   public boolean execute(CommandSender sender, String command, String[] arguments) {
-    return false;
+
+    if(arguments.length < 1) {
+      help(sender);
+      return false;
+    }
+
+    HellConomy.instance().saveManager().open();
+    if(!HellConomy.api().hasAccount(arguments[0])) {
+      sender.sendMessage(ChatColor.RED + "Invalid account name specified \"" + arguments[0] + "\".");
+      HellConomy.instance().saveManager().close();
+      return false;
+    }
+
+    final UUID id = HellAPI.getID(arguments[0]);
+    HellAccount.delete(id);
+    IDStorage.delete(id);
+
+    sender.sendMessage(ChatColor.GOLD + "Successfully deleted the account for \"" + arguments[0] + "\".");
+    HellConomy.instance().saveManager().close();
+    return true;
   }
 }

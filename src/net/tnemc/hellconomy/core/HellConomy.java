@@ -139,10 +139,13 @@ public class HellConomy extends JavaPlugin {
       }
     }
     saveManager.close();
-
     //Register Commands.
-    registerCommand(new String[]{"account"}, new AccountCommand(this));
-    registerCommand(new String[]{"money"}, new MoneyCommand(this));
+    registerCommand(new String[]{"account", "acc"}, new AccountCommand(this));
+    registerCommand(new String[]{
+        "money", "bal", "balance", "pay", "baltop",
+        "givemoney", "givebal", "setbal",
+        "setmoney", "takemoney", "takebal",
+        "balo", "balother"}, new MoneyCommand(this));
 
     //Register Listeneners
     registerListener(new ConnectionListener(this));

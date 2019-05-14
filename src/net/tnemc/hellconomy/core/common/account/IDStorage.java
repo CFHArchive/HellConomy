@@ -51,6 +51,10 @@ public class IDStorage extends Model {
     return UUID.fromString(getStorage(display).getString("uuid"));
   }
 
+  public static void delete(UUID identifier) {
+    IDStorage.delete("uuid = ?", identifier.toString());
+  }
+
   public static UUID freeID() {
     UUID id = UUID.randomUUID();
     if(exists(id)) {

@@ -37,11 +37,13 @@ public class WorldChangeListener implements Listener {
 
     if(HellConomy.mapper().getBool("server.multi_world") &&
         !HellConomy.instance().getWorldManager(event.getFrom().getName()).getBalanceWorld().equalsIgnoreCase(world)) {
+      HellConomy.instance().saveManager().open();
       HellConomy.instance().getWorldManager(world).getItemCurrencies().forEach(value -> {
         final HellCurrency currency = HellConomy.currencyManager().get(world, value);
         ItemCalculations.setItems(HellConomy.currencyManager().get(world, value),
                                   HellAccount.getHoldings(id, world, currency, true), player.getInventory(), false);
       });
+      HellConomy.instance().saveManager().close();
     }
   }
 }
