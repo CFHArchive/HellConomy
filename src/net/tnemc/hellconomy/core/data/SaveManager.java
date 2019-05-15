@@ -103,11 +103,12 @@ public class SaveManager {
                   ") ENGINE = INNODB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
 
     mysql.add("CREATE TABLE IF NOT EXISTS `hellco_balances` (" +
-                  "`balance_owner` VARCHAR(36) NOT NULL UNIQUE," +
-                  "`balance_server` VARCHAR(100)," +
-                  "`balance_world` VARCHAR(100)," +
-                  "`balance_currency` VARCHAR(100)," +
-                  "`balance_amount` DECIMAL(49,4)" +
+                  "`balance_owner` VARCHAR(36) NOT NULL," +
+                  "`balance_server` VARCHAR(100) NOT NULL," +
+                  "`balance_world` VARCHAR(100) NOT NULL," +
+                  "`balance_currency` VARCHAR(100) NOT NULL," +
+                  "`balance_amount` DECIMAL(49,4)," +
+                  "PRIMARY KEY(balance_owner, balance_server, balance_world, balance_currency)" +
                   ") ENGINE = INNODB DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
     
     List<String> h2 = new ArrayList<>();
@@ -130,12 +131,13 @@ public class SaveManager {
                   ") ENGINE = INNODB;");
 
     h2.add("CREATE TABLE IF NOT EXISTS `hellco_balances` (" +
-                  "`balance_owner` VARCHAR(36) NOT NULL UNIQUE," +
-                  "`balance_server` VARCHAR(100)," +
-                  "`balance_world` VARCHAR(100)," +
-                  "`balance_currency` VARCHAR(100)," +
+                  "`balance_owner` VARCHAR(36) NOT NULL," +
+                  "`balance_server` VARCHAR(100) NOT NULL," +
+                  "`balance_world` VARCHAR(100) NOT NULL," +
+                  "`balance_currency` VARCHAR(100) NOT NULL," +
                   "`balance_amount` DECIMAL(49,4)" +
                   ") ENGINE = INNODB;");
+    h2.add("ALTER TABLE `hellco_balances` ADD PRIMARY KEY(balance_owner, balance_server, balance_world, balance_currency);");
 
     dataTables.put("mysql", mysql);
     dataTables.put("h2", h2);
@@ -148,7 +150,11 @@ public class SaveManager {
       provider.preConnect(file, host, port, dbName);
       db.open(provider.getDriver(), provider.getURL(file, host, port, dbName), user, pass);
       tables.forEach((table)->{
-        db.exec(table);
+        try {
+          db.exec(table);
+        } catch(Exception ignore) {
+
+        }
       });
       Version.add(HellConomy.instance().getVersion());
     } finally {
@@ -157,7 +163,6 @@ public class SaveManager {
   }
 
   public void updateTables(String version) {
-
   }
 
   public DB getDb() {

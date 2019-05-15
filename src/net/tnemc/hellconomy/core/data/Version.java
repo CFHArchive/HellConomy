@@ -28,7 +28,7 @@ public class Version extends Model {
   }
 
   public static boolean informationExists() {
-    return Version.findById(1) != null;
+    return Version.findFirst("id = ?", 1) != null;
   }
 
   public static Version get() {

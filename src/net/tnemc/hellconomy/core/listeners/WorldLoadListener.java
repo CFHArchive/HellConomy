@@ -26,6 +26,8 @@ public class WorldLoadListener implements Listener {
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onWorldLoad(final WorldLoadEvent event) {
     String world = event.getWorld().getName();
+    System.out.println("WorldLoadEvent Start " + world);
     HellConomy.currencyManager().initializeWorld(world);
+    System.out.println("WorldLoadEvent End " + world);
   }
 }

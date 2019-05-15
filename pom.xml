@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.tnemc.hellconomy</groupId>
     <artifactId>HellConomy</artifactId>
-    <version>0.1.0.0</version>
+    <version>0.1.1.0</version>
     <name>HellConomy</name>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>

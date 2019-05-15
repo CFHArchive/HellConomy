@@ -55,7 +55,7 @@ public class HellConomy extends JavaPlugin {
   private SaveManager saveManager;
   private CommandManager commandManager;
   private String defaultWorld = "world";
-  private String version = "0.1.0.0";
+  private String version = "0.1.1.0";
   private String server = "Main Server";
 
   private ConfigurationMapper mapper;
@@ -115,9 +115,12 @@ public class HellConomy extends JavaPlugin {
 
     for(World world : Bukkit.getWorlds()) {
       final String name = world.getName();
-      addWorldManager(new WorldManager(name, name));
+      if(!hasWorldManager(name)) {
+        addWorldManager(new WorldManager(name, name));
+      }
       if(mapper.getConfigurationByID("world_sharing").contains("world_sharing." + name)) {
         for(String sharing : mapper.getConfigurationByID("world_sharing").getStringList("world_sharing." + name)) {
+          System.out.println("WorldSharing added - " + sharing + " > " + name);
           addWorldManager(new WorldManager(sharing, name));
         }
       }
@@ -262,6 +265,7 @@ public class HellConomy extends JavaPlugin {
 
   public void addWorldManager(WorldManager manager) {
     worldManagers.put(manager.getWorld(), manager);
+    System.out.println("Adding WorldManager(" + manager.getWorld() + ") > " + manager.getBalanceWorld());
   }
 
   public boolean hasWorldManager(String world) {
@@ -290,7 +294,10 @@ public class HellConomy extends JavaPlugin {
       return HellConomy.instance().getDefaultWorld();
     }
 
-    if(worldManagers.containsKey(world)) return getWorldManager(world).getBalanceWorld();
+    if(worldManagers.containsKey(world)) {
+      System.out.println("Normalizing " + world + " to " + getWorldManager(world).getBalanceWorld());
+      return getWorldManager(world).getBalanceWorld();
+    }
     return world;
   }
 

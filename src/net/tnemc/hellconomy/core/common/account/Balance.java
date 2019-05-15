@@ -41,7 +41,7 @@ public class Balance extends Model {
 
     balance.set("balance_owner", owner.toString());
     balance.set("balance_server", server);
-    balance.set("balance_world", world);
+    balance.set("balance_world", HellConomy.instance().normalizeWorld(world));
     balance.set("balance_currency", currency);
     balance.set("balance_amount", amount);
 
@@ -101,11 +101,11 @@ public class Balance extends Model {
   }
 
   public static Balance getBalance(UUID owner, String server, String world, String currency) {
-    return Balance.findFirst("balance_owner = ? AND balance_server = ? AND balance_world = ? AND balance_currency = ?", owner.toString(), server, world, currency);
+    return Balance.findFirst("balance_owner = ? AND balance_server = ? AND balance_world = ? AND balance_currency = ?", owner.toString(), server, HellConomy.instance().normalizeWorld(world), currency);
   }
 
   public static boolean exists(UUID owner, String server, String world, String currency) {
-    return Balance.findFirst("balance_owner = ? AND balance_server = ? AND balance_world = ? AND balance_currency = ?", owner.toString(), server, world, currency) != null;
+    return Balance.findFirst("balance_owner = ? AND balance_server = ? AND balance_world = ? AND balance_currency = ?", owner.toString(), server, HellConomy.instance().normalizeWorld(world), currency) != null;
   }
 
   public static void delete(UUID owner, String server, String world, String currency) {

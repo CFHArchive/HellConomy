@@ -55,7 +55,7 @@ public class MoneyBalanceCommand extends TNECommand {
   public boolean execute(CommandSender sender, String command, String[] arguments) {
 
     final UUID id = getPlayer(sender).getUniqueId();
-    final String world = getPlayer(sender).getWorld().getName();
+    final String world = HellConomy.instance().normalizeWorld(getPlayer(sender).getWorld().getName());
     final BigDecimal amount = HellAccount.getHoldings(id, world, HellConomy.currencyManager().get(world), false);
     sender.sendMessage(ChatColor.YELLOW + "You have " + CurrencyFormatter.format(HellConomy.currencyManager().get(world), world, amount));
     HellConomy.instance().saveManager().close();
