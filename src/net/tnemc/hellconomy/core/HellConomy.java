@@ -73,12 +73,6 @@ public class HellConomy extends JavaPlugin {
   public void onLoad() {
     instance = this;
 
-    if(getServer().getPluginManager().getPlugin("GUIShop") != null) {
-      getLogger().info("Unable to load HellConomy as it is incompatible with GUIShop.");
-      blacklisted = true;
-      return;
-    }
-
     getLogger().info("Loading HellConomy with Java Version: " + System.getProperty("java.version"));
     instance = this;
     api = new HellAPI(this);
