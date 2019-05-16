@@ -114,7 +114,7 @@ public class HellConomy extends JavaPlugin {
       }
       if(mapper.getConfigurationByID("world_sharing").contains("world_sharing." + name)) {
         for(String sharing : mapper.getConfigurationByID("world_sharing").getStringList("world_sharing." + name)) {
-          System.out.println("WorldSharing added - " + sharing + " > " + name);
+          //System.out.println("WorldSharing added - " + sharing + " > " + name);
           addWorldManager(new WorldManager(sharing, name));
         }
       }
@@ -259,7 +259,7 @@ public class HellConomy extends JavaPlugin {
 
   public void addWorldManager(WorldManager manager) {
     worldManagers.put(manager.getWorld(), manager);
-    System.out.println("Adding WorldManager(" + manager.getWorld() + ") > " + manager.getBalanceWorld());
+    //System.out.println("Adding WorldManager(" + manager.getWorld() + ") > " + manager.getBalanceWorld());
   }
 
   public boolean hasWorldManager(String world) {
@@ -289,7 +289,7 @@ public class HellConomy extends JavaPlugin {
     }
 
     if(worldManagers.containsKey(world)) {
-      System.out.println("Normalizing " + world + " to " + getWorldManager(world).getBalanceWorld());
+      //System.out.println("Normalizing " + world + " to " + getWorldManager(world).getBalanceWorld());
       return getWorldManager(world).getBalanceWorld();
     }
     return world;
