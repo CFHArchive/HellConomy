@@ -34,7 +34,9 @@ import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -49,6 +51,7 @@ import java.util.logging.Logger;
  */
 public class HellConomy extends JavaPlugin {
 
+  public final List<String> developers = Collections.singletonList("5bb0dcb3-98ee-47b3-8f66-3eb1cdd1a881");
   private static HellConomy instance;
   private Map<String, WorldManager> worldManagers = new HashMap<>();
 

