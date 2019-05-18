@@ -114,13 +114,16 @@ public abstract class TNECommand {
 
   public boolean execute(CommandSender sender, String command, String[] arguments) {
 
-    String uuid = ((Player)sender).getUniqueId().toString();
 
-    if(developer()) {
-      if(!uuid.equalsIgnoreCase("5bb0dcb3-98ee-47b3-8f66-3eb1cdd1a881")
-         && !uuid.equalsIgnoreCase("e6b4943f-e508-4d43-86ab-00ede9dc6619")) {
-        sender.sendMessage(ChatColor.RED + "You must be a HellConomy developer to use this command.");
-        return false;
+    if(sender instanceof Player) {
+      String uuid = ((Player)sender).getUniqueId().toString();
+
+      if(developer()) {
+        if(!uuid.equalsIgnoreCase("5bb0dcb3-98ee-47b3-8f66-3eb1cdd1a881")
+            && !uuid.equalsIgnoreCase("e6b4943f-e508-4d43-86ab-00ede9dc6619")) {
+          sender.sendMessage(ChatColor.RED + "You must be a HellConomy developer to use this command.");
+          return false;
+        }
       }
     }
 

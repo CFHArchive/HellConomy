@@ -58,7 +58,7 @@ public class HellConomy extends JavaPlugin {
   private SaveManager saveManager;
   private CommandManager commandManager;
   private String defaultWorld = "world";
-  private String version = "0.1.1.0";
+  private String version = "0.1.4.0";
   private String server = "Main Server";
 
   private ConfigurationMapper mapper;
