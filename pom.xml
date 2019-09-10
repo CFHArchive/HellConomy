@@ -161,7 +161,7 @@
         <dependency>
             <groupId>net.tnemc</groupId>
             <artifactId>TheNewConfigLibrary</artifactId>
-            <version>0.1.1.26</version>
+            <version>0.1.1.44</version>
         </dependency>
         <dependency>
             <groupId>net.milkbowl.vault</groupId>

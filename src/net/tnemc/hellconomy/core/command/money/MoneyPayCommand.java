@@ -67,6 +67,15 @@ public class MoneyPayCommand extends TNECommand {
       return false;
     }
 
+    if(HellConomy.mapper().getBool("account.receive_perm")) {
+      final Player player = Bukkit.getPlayer(arguments[0]);
+      if(player == null || !player.hasPermission("hellconomy.money.receive")) {
+        sender.sendMessage(ChatColor.RED + "Account \"" + arguments[0] + "\" unable to receive money.");
+        HellConomy.instance().saveManager().close();
+        return false;
+      }
+    }
+
     BigDecimal amount = BigDecimal.ZERO;
     try {
       amount = new BigDecimal(arguments[1]);

@@ -1,5 +1,6 @@
 package net.tnemc.hellconomy.core;
 
+import com.hellyard.cuttlefish.grammar.yaml.YamlValue;
 import net.milkbowl.vault.economy.Economy;
 import net.tnemc.hellconomy.core.api.Economy_HellConomy;
 import net.tnemc.hellconomy.core.api.HellAPI;
@@ -15,6 +16,7 @@ import net.tnemc.hellconomy.core.compatibility.item.ItemCompatibility13;
 import net.tnemc.hellconomy.core.data.SaveManager;
 import net.tnemc.hellconomy.core.data.Version;
 import net.tnemc.hellconomy.core.listeners.ConnectionListener;
+import net.tnemc.hellconomy.core.listeners.DeathListener;
 import net.tnemc.hellconomy.core.listeners.EntityPortalListener;
 import net.tnemc.hellconomy.core.listeners.PlayerJoinListener;
 import net.tnemc.hellconomy.core.listeners.PlayerQuitListener;
@@ -33,6 +35,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -58,7 +62,7 @@ public class HellConomy extends JavaPlugin {
   private SaveManager saveManager;
   private CommandManager commandManager;
   private String defaultWorld = "world";
-  private String version = "0.1.4.0";
+  private String version = "0.1.5.0";
   private String server = "Main Server";
 
   private ConfigurationMapper mapper;
@@ -133,11 +137,29 @@ public class HellConomy extends JavaPlugin {
 
     saveManager.createTables();
     saveManager.open();
+    System.out.println("Version information is being checked.");
     if(Version.informationExists()) {
+      System.out.println("Version information is here.");
       if(Version.outdated()) {
+        System.out.println("Outdated! Latest version: " + version);
         saveManager.updateTables(version);
         Version.add(version);
+
+        if(version.equalsIgnoreCase("0.1.5.0")) {
+          System.out.println("Updating configurations.");
+          //mapper.getConfiguration("account").set("account.receive_perm", new YamlValue(new ArrayList<>(), "false", "boolean"));
+          //mapper.getConfiguration("account").set("account.reset_death", new YamlValue(new ArrayList<>(), "false", "boolean"));
+          mapper.getConfiguration("account").setOrCreate("account.receive_perm", "false");
+          mapper.getConfiguration("account").setOrCreate("account.reset_death", "false");
+          mapper.getConfiguration("account").save(new File(getDataFolder(), "config.yml"));
+        }
       }
+    } else {
+      Version.add(version);
+      mapper.getConfiguration("account").setValue("account.receive_perm", new YamlValue(Arrays.asList("Whether or not players need a certain permission to receive money.", "If set to true, transactions to offline players will be disabled."), "false", "bool"), 0);
+      mapper.getConfiguration("account").setValue("account.reset_death", new YamlValue(Arrays.asList("Whether or not to reset player balances on death."), "false", "bool"), 0);
+      //mapper.getConfiguration("account").getSection("account").set("reset_death", "false");
+      mapper.getConfiguration("account").save(new File(getDataFolder(), "config.yml"));
     }
     saveManager.close();
     //Register Commands.
@@ -151,6 +173,9 @@ public class HellConomy extends JavaPlugin {
 
     //Register Listeneners
     registerListener(new ConnectionListener(this));
+    if(mapper.getBool("account.reset_death")) {
+      registerListener(new DeathListener(this));
+    }
     registerListener(new EntityPortalListener(this));
     registerListener(new PlayerJoinListener(this));
     registerListener(new PlayerQuitListener(this));
@@ -170,6 +195,8 @@ public class HellConomy extends JavaPlugin {
   }
 
   public void onDisable() {
+
+    saveManager.close();
 
     getLogger().info("HellConomy has been disabled!");
   }

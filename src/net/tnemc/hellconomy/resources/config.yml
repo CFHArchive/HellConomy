@@ -28,6 +28,13 @@ account:
   #The initial balance for accounts.
   balance: 200.0
 
+  #Whether or not players need a certain permission to receive money.
+  #If set to true, transactions to offline players will be disabled.
+  receive_perm: false
+
+  #Whether or not to reset player balances on death.
+  reset_death: false
+
 #Currency Configurations
 currency:
 

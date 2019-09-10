@@ -1,5 +1,6 @@
 package net.tnemc.hellconomy.core.conversion.impl;
 
+import net.tnemc.core.economy.currency.Currency;
 import net.tnemc.hellconomy.core.HellConomy;
 import net.tnemc.hellconomy.core.conversion.Converter;
 import net.tnemc.hellconomy.core.conversion.InvalidDatabaseImport;
@@ -8,6 +9,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * HellConomy Minecraft Server Plugin
@@ -37,5 +40,28 @@ public class Essentials extends Converter {
 
       Converter.convertedAdd(acc.getString("lastAccountName"), HellConomy.instance().getDefaultWorld(), currency, money);
     }
+  }
+
+  @Override
+  public void mysql() throws InvalidDatabaseImport {
+    File configFile = new File(HellConomy.instance().getDataFolder(), "../EssentialsMysqlStorage/config.yml");
+    FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+
+    final String table = config.getString("Database.Mysql.TableName");
+    db.open(dataSource);
+
+    try(ResultSet results = db.getConnection().createStatement().executeQuery("SELECT player_uuid, money, offline_money FROM " + table + ";")) {
+
+      final Currency currency = HellConomy.currencyManager().get(HellConomy.instance().getDefaultWorld());
+      while(results.next()) {
+        Converter.convertedAdd(results.getString("player_uuid"),
+                               HellConomy.instance().getDefaultWorld(), currency.name(),
+                                      new BigDecimal(results.getDouble("money")));
+        Converter.convertedAdd(results.getString("player_uuid"),
+                               HellConomy.instance().getDefaultWorld(), currency.name(),
+                                      new BigDecimal(results.getDouble("offline_money")));
+      }
+    } catch(SQLException ignore) {}
+    db.close();
   }
 }

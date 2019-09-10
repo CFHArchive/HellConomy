@@ -3,6 +3,7 @@ package net.tnemc.hellconomy.core.command.money;
 import net.tnemc.hellconomy.core.HellConomy;
 import net.tnemc.hellconomy.core.command.TNECommand;
 import net.tnemc.hellconomy.core.currency.CurrencyFormatter;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -63,6 +64,15 @@ public class MoneyGiveCommand extends TNECommand {
       sender.sendMessage(ChatColor.RED + "Invalid account name specified \"" + arguments[0] + "\".");
       HellConomy.instance().saveManager().close();
       return false;
+    }
+
+    if(HellConomy.mapper().getBool("account.receive_perm")) {
+      final Player player = Bukkit.getPlayer(arguments[0]);
+      if(player == null || !player.hasPermission("hellconomy.money.receive")) {
+        sender.sendMessage(ChatColor.RED + "Account \"" + arguments[0] + "\" unable to receive money.");
+        HellConomy.instance().saveManager().close();
+        return false;
+      }
     }
 
     BigDecimal amount = BigDecimal.ZERO;

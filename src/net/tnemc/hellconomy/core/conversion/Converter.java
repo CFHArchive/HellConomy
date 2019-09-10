@@ -9,6 +9,7 @@ import net.tnemc.hellconomy.core.conversion.impl.BEconomy;
 import net.tnemc.hellconomy.core.conversion.impl.BOSEconomy;
 import net.tnemc.hellconomy.core.conversion.impl.BasicEconomy;
 import net.tnemc.hellconomy.core.conversion.impl.Blings;
+import net.tnemc.hellconomy.core.conversion.impl.CMI;
 import net.tnemc.hellconomy.core.conversion.impl.DevCoinSystem;
 import net.tnemc.hellconomy.core.conversion.impl.ECEconomy;
 import net.tnemc.hellconomy.core.conversion.impl.EasyCoins;
@@ -196,7 +197,7 @@ public abstract class Converter {
 
   public static Converter getConverter(String name) {
 
-    switch(name) {
+    switch(name.toLowerCase()) {
       case "advancedeconomy":
         return new AdvancedEconomy();
       case "basiceconomy":
@@ -209,6 +210,8 @@ public abstract class Converter {
         return new Blings();
       case "boseconomy":
         return new BOSEconomy();
+      case "cmi":
+        return new CMI();
       case "devcoinsystem":
         return new DevCoinSystem();
       case "easycoins":
