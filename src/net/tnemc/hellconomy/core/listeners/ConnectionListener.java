@@ -33,8 +33,10 @@ public class ConnectionListener implements Listener {
     final UUID id = event.getUniqueId();
     final String name = event.getName();
     HellConomy.instance().saveManager().open();
+    
     if(!HellAccount.exists(id)) {
       HellAccount.add(id, name, new Date().getTime(), true);
+      HellAccount.initializeHoldings(id, HellConomy.instance().getDefaultWorld());
       IDStorage.add(id, name);
     } else {
       if(IDStorage.exists(id)) {
