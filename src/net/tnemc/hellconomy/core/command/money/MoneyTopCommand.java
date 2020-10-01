@@ -71,9 +71,15 @@ public class MoneyTopCommand extends TNECommand {
     if(page > p.pageCount()) page = p.pageCount();
 
     LazyList<Balance> entries = p.getPage((int)page);
-    sender.sendMessage(ChatColor.GOLD + "~~~ HellConomy Top " + page + "/ " + p.pageCount() + " ~~~");
+    sender.sendMessage(ChatColor.GOLD + "~~~ Balance Top " + page + "/ " + p.pageCount() + " ~~~");
     for(Balance balance : entries) {
-      sender.sendMessage(ChatColor.WHITE + HellAPI.getUsername(balance.getString("balance_owner")) + ChatColor.GOLD + " - " + ChatColor.WHITE + CurrencyFormatter.format(world, balance.getBigDecimal("balance_amount")));
+      String username = HellAPI.getUsername(balance.getString("balance_owner"));
+
+      // Check for Towny Prefixes.
+      if(username.startsWith("town-") || username.startsWith("nation-") || username.startsWith("[DEBT]-"))
+        continue;
+
+      sender.sendMessage(ChatColor.WHITE + username + ChatColor.GOLD + " - " + ChatColor.WHITE + CurrencyFormatter.format(world, balance.getBigDecimal("balance_amount")));
       //sender.sendMessage(ChatColor.WHITE + balance.getString("balance_owner") + ChatColor.GOLD + " - " + ChatColor.WHITE + CurrencyFormatter.format(world, balance.getBigDecimal("balance_amount")));
     }
 
